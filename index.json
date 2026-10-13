@@ -15,7 +15,16 @@
       "kind": "channel",
       "path": "plugins/seo",
       "summary": "SEO agent: keyword queue, AI article drafts, CMS publishing, published-article refresh, dashboard overview",
-      "keywords": ["seo", "content", "blog", "articles", "ghost", "wordpress", "strapi", "organic"]
+      "keywords": [
+        "seo",
+        "content",
+        "blog",
+        "articles",
+        "ghost",
+        "wordpress",
+        "strapi",
+        "organic"
+      ]
     },
     {
       "name": "google-ads",
@@ -23,7 +32,17 @@
       "kind": "channel",
       "path": "plugins/google-ads",
       "summary": "Google Ads agent: daily Testing → Winners loop, locked Mastra tools, KPI + sessions dashboard",
-      "keywords": ["google ads", "ads", "search", "ppc", "mastra", "testing", "winners", "dataforseo", "keywords"]
+      "keywords": [
+        "google ads",
+        "ads",
+        "search",
+        "ppc",
+        "mastra",
+        "testing",
+        "winners",
+        "dataforseo",
+        "keywords"
+      ]
     },
     {
       "name": "outbound",
@@ -31,7 +50,22 @@
       "kind": "channel",
       "path": "plugins/outbound",
       "summary": "Cold outbound agent: Instantly campaigns, one playbook document each, draft or auto-send replies",
-      "keywords": ["outbound", "cold email", "cold outbound", "instantly", "replies", "playbook"]
+      "keywords": [
+        "outbound",
+        "cold email",
+        "cold outbound",
+        "instantly",
+        "replies",
+        "playbook"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "feedback",
+      "version": "0.1.0",
+      "path": "skills/feedback",
+      "summary": "Ask the user to report a Graphed platform problem with graphed feedback"
     }
   ]
 }
