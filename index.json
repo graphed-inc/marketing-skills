@@ -66,6 +66,18 @@
       "version": "0.1.0",
       "path": "skills/feedback",
       "summary": "Ask the user to report a Graphed platform problem with graphed feedback"
+    },
+    {
+      "name": "post-to-video",
+      "version": "0.1.0",
+      "path": "skills/post-to-video",
+      "summary": "Turn an X or LinkedIn post into a beat-timed Tesseract motion-graphic video"
+    },
+    {
+      "name": "tesseract-motion",
+      "version": "0.1.0",
+      "path": "skills/tesseract-motion",
+      "summary": "Create editable Tesseract motion graphics, typography, diagrams, and footage overlays"
     }
   ]
 }
