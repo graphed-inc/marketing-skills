@@ -78,6 +78,12 @@
       "version": "0.1.0",
       "path": "skills/tesseract-motion",
       "summary": "Create editable Tesseract motion graphics, typography, diagrams, and footage overlays"
+    },
+    {
+      "name": "enrich-linkedin-engagers",
+      "version": "0.1.0",
+      "path": "skills/enrich-linkedin-engagers",
+      "summary": "Scrape LinkedIn engagers, find their emails, verify with MillionVerifier, and save a run artifact"
     }
   ]
 }

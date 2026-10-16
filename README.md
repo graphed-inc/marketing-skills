@@ -18,6 +18,7 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [Feedback](skills/feedback/SKILL.md) | Asks you to send Graphed a short note when the product or the docs are wrong or missing. | [Instructions](skills/feedback/SKILL.md) |
 | [Post to video](skills/post-to-video/SKILL.md) | Turns one X or LinkedIn post into a short motion-graphic video, timed to a music beat. | [Instructions](skills/post-to-video/SKILL.md) |
 | [Tesseract motion](skills/tesseract-motion/SKILL.md) | Builds an editable motion graphic in Tesseract: type, diagrams, lower thirds, and overlays on footage. | [Instructions](skills/tesseract-motion/SKILL.md) |
+| [LinkedIn engagers](skills/enrich-linkedin-engagers/SKILL.md) | Pulls people who engaged with a LinkedIn profile or post, finds their emails, and verifies which ones can be delivered. | [Instructions](skills/enrich-linkedin-engagers/SKILL.md) |
 
 <!-- catalog:end -->
 

@@ -1,0 +1,15 @@
+{
+  "name": "@app/jobs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "job:example-daily": "tsx src/example-daily.ts",
+    "job:linkedin-engagers": "tsx src/linkedin-engagers.ts",
+    "job:linkedin-engagers-self-check": "tsx src/linkedin-engagers-self-check.ts"
+  },
+  "dependencies": {
+    "@app/core": "*",
+    "@graphed-inc/sdk": "^0.0.4"
+  }
+}

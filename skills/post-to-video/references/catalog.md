@@ -3,6 +3,7 @@
 Each row is a finished project in `videos/<slug>/` with its own `.tesseract-work/build.py` and `NOTES.md`.
 Read a build.py when you need a working pattern (listed in the last column).
 Pick a visual system that is NOT in this table, and add a row when you finish.
+Music in-points in this table are from an older library. Use `references/music.md` for the files that ship now.
 
 | Slug | Post | Seed reading → visual system | Look | Music (in-point) | Reusable pattern |
 |---|---|---|---|---|---|
