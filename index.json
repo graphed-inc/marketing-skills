@@ -84,6 +84,18 @@
       "version": "0.1.0",
       "path": "skills/enrich-linkedin-engagers",
       "summary": "Scrape LinkedIn engagers, find their emails, verify with MillionVerifier, and save a run artifact"
+    },
+    {
+      "name": "static-ads",
+      "version": "0.1.0",
+      "path": "skills/static-ads",
+      "summary": "Pull a brand's Ad Library ads and site style, then generate five static Meta ads with GPT Image 2"
+    },
+    {
+      "name": "ugc-video",
+      "version": "0.2.0",
+      "path": "skills/ugc-video",
+      "summary": "Turn a script into a vertical UGC ad with a cloned voice, a Seedance talking head, and local word fixes"
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "voice_id": "Voice3f1a8bc91792169825",
+  "voice_note": "fal MiniMax clone of voice-ref.mp3. MiniMax deletes a clone that is not used for about 7 days; run make_ugc.py --clone-voice to make a new id from voice-ref.mp3.",
+  "speaker": "Latina woman, long wavy dark hair, same face, kitchen selfie",
+  "setting": "restaurant back kitchen, stainless steel, fluorescent ceiling lights",
+  "persona": "Latina woman in her 30s, black polo, runs social for a small food business, filming a selfie on her phone",
+  "energy": "natural"
+}

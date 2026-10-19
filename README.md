@@ -19,6 +19,8 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [Post to video](skills/post-to-video/SKILL.md) | Turns one X or LinkedIn post into a short motion-graphic video, timed to a music beat. | [Instructions](skills/post-to-video/SKILL.md) |
 | [Tesseract motion](skills/tesseract-motion/SKILL.md) | Builds an editable motion graphic in Tesseract: type, diagrams, lower thirds, and overlays on footage. | [Instructions](skills/tesseract-motion/SKILL.md) |
 | [LinkedIn engagers](skills/enrich-linkedin-engagers/SKILL.md) | Pulls people who engaged with a LinkedIn profile or post, finds their emails, and verifies which ones can be delivered. | [Instructions](skills/enrich-linkedin-engagers/SKILL.md) |
+| [Static ads](skills/static-ads/SKILL.md) | Reads a brand's current ads and website, then generates static Meta ads aimed at the angles those ads miss. | [Instructions](skills/static-ads/SKILL.md) |
+| [UGC video](skills/ugc-video/SKILL.md) | Turns a script into a finished vertical talking-head video ad. A cloned voice reads the script, the avatar is rendered speaking it, and missed words are fixed on your machine. | [Instructions](skills/ugc-video/SKILL.md) |
 
 <!-- catalog:end -->
 

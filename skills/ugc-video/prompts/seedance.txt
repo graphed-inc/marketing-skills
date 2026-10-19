@@ -1,0 +1,15 @@
+Vertical 9:16 selfie video, shot on an iPhone front-facing camera at arm's length. A woman in her mid 30s, minimal makeup, hair pulled back in a practical ponytail, wearing a simple fitted polo or casual button-down, holds the phone in one hand slightly above eye level so the camera looks gently down at her. She is standing in a small restaurant kitchen or host area, stainless steel surfaces and a few kitchen tools softly blurred behind her, soft even overhead light on her face — no bright rim light, no glow around her head.
+
+Camera: front-facing wide-angle selfie lens, subtle barrel distortion, face occupying the upper-center third of frame, torso and one shoulder visible, the extended arm just barely in frame at the bottom edge. Continuous handheld motion, small natural sway, micro-shakes, tiny reframes as they talk and shift their weight. Autofocus breathing, slight exposure shift. No tripod, no gimbal, no cinematic camera moves.
+
+Performance: she talks directly into the lens, steady eye contact, casual and confident like she's venting to a fellow restaurant owner on a quick TikTok. BRISK delivery — speak fast, almost no pauses between sentences, keep talking through the whole clip with barely a breath. Energetic UGC pace, not a slow monologue. No long silences. Slight wry frustration in her tone. Continue naturally from the previous moment if a first frame is provided.
+
+Audio: voice recorded on the phone mic, close, slightly roomy, faint kitchen ambience (ventilation hum, distant clatter, low music from the dining room). Same natural speaking voice throughout — no sudden pitch or timbre jumps.
+
+Look: raw unpolished UGC, iPhone-native color, mild digital noise in the shadows, no color grade, no lens flare, no halo or glow around the head, no rim light, no b-roll, no text overlays, no music. Single unbroken take.
+
+Dialogue: "{dialogue}"
+
+The speaker is the woman in [Image1] — {speaker}. Lip-sync to [Audio1] exactly. Do not invent extra words, do not change the read, do not add background music. Mouth timing follows [Audio1]. Keep her looking into the lens for the full {duration} seconds.
+
+Say every word exactly as written in the Dialogue, in order, with no substitutions.
