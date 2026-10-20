@@ -62,6 +62,12 @@
   ],
   "skills": [
     {
+      "name": "analytics-dashboard",
+      "version": "0.3.2",
+      "path": "skills/analytics-dashboard",
+      "summary": "Build an analytics dashboard from the data in your warehouse"
+    },
+    {
       "name": "feedback",
       "version": "0.1.0",
       "path": "skills/feedback",

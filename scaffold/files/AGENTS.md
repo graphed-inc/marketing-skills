@@ -48,7 +48,8 @@ everything.
 - **UI components are shadcn/ui, always.** The dashboard is set up for it:
   `components/ui/` (button, card, badge, table, ...), `components.json`,
   `cn()` in `lib/utils.ts`, design tokens as CSS variables in
-  `app/globals.css` (dark slate theme). Compose the existing components
+  `app/globals.css` (slate tokens, light on `:root` and dark on `.dark`,
+  toggled with next-themes). Compose the existing components
   first; when one is missing, add it with `npx shadcn@latest add <name>`
   rather than hand-rolling markup. No other component libraries, no inline
   `style=` attributes.

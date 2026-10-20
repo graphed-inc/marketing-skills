@@ -15,6 +15,7 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [SEO](plugins/seo/README.md) | Researches keywords and drafts articles. When you connect Ghost, WordPress, or Strapi, it can publish them, and it can refresh posts that are already live. | [Instructions](plugins/seo/AGENT.md) |
 | [Google Ads](plugins/google-ads/README.md) | Reviews the Google Ads account every day and lines up budget moves, winning keywords, and search terms to stop paying for. Nothing in the account changes until you turn that on. | [Instructions](plugins/google-ads/AGENT.md) |
 | [Cold email](plugins/outbound/README.md) | Connects to Instantly, keeps a playbook for each campaign, and drafts replies or sends them for you. | [Instructions](plugins/outbound/AGENT.md) |
+| [Analytics Dashboard](skills/analytics-dashboard/SKILL.md) | Build an analytics dashboard from the data in your warehouse. | [Instructions](skills/analytics-dashboard/SKILL.md) |
 | [Feedback](skills/feedback/SKILL.md) | Asks you to send Graphed a short note when the product or the docs are wrong or missing. | [Instructions](skills/feedback/SKILL.md) |
 | [Post to video](skills/post-to-video/SKILL.md) | Turns one X or LinkedIn post into a short motion-graphic video, timed to a music beat. | [Instructions](skills/post-to-video/SKILL.md) |
 | [Tesseract motion](skills/tesseract-motion/SKILL.md) | Builds an editable motion graphic in Tesseract: type, diagrams, lower thirds, and overlays on footage. | [Instructions](skills/tesseract-motion/SKILL.md) |

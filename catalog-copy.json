@@ -1,0 +1,55 @@
+{
+  "seo": {
+    "title": "SEO",
+    "summary": "Researches keywords and drafts articles. When you connect Ghost, WordPress, or Strapi, it can publish them, and it can refresh posts that are already live.",
+    "themes": ["SEO", "Content"]
+  },
+  "google-ads": {
+    "title": "Google Ads",
+    "summary": "Reviews the Google Ads account every day and lines up budget moves, winning keywords, and search terms to stop paying for. Nothing in the account changes until you turn that on.",
+    "themes": ["Ads"]
+  },
+  "outbound": {
+    "title": "Cold email",
+    "summary": "Connects to Instantly, keeps a playbook for each campaign, and drafts replies or sends them for you.",
+    "themes": ["Outbound"]
+  },
+  "analytics-dashboard": {
+    "title": "Analytics Dashboard",
+    "summary": "Build an analytics dashboard from the data in your warehouse.",
+    "themes": ["Analytics"],
+    "lead": true
+  },
+  "feedback": {
+    "title": "Feedback",
+    "summary": "Asks you to send Graphed a short note when the product or the docs are wrong or missing.",
+    "themes": ["Product"],
+    "hidden": true
+  },
+  "post-to-video": {
+    "title": "Post to video",
+    "summary": "Turns one X or LinkedIn post into a short motion-graphic video, timed to a music beat.",
+    "themes": ["Video", "Social"]
+  },
+  "tesseract-motion": {
+    "title": "Tesseract motion",
+    "summary": "Builds an editable motion graphic in Tesseract: type, diagrams, lower thirds, and overlays on footage.",
+    "themes": ["Video", "Creative"],
+    "hidden": true
+  },
+  "enrich-linkedin-engagers": {
+    "title": "LinkedIn engagers",
+    "summary": "Pulls people who engaged with a LinkedIn profile or post, finds their emails, and verifies which ones can be delivered.",
+    "themes": ["Outbound", "Social"]
+  },
+  "static-ads": {
+    "title": "Static ads",
+    "summary": "Reads a brand's current ads and website, then generates static Meta ads aimed at the angles those ads miss.",
+    "themes": ["Ads", "Creative"]
+  },
+  "ugc-video": {
+    "title": "UGC video",
+    "summary": "Turns a script into a finished vertical talking-head video ad. A cloned voice reads the script, the avatar is rendered speaking it, and missed words are fixed on your machine.",
+    "themes": ["Video", "Ads"]
+  }
+}

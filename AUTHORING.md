@@ -56,10 +56,12 @@ are not committed here. A plugin named `google-ads` is invoked as
 
 ## Catalog
 
-The table in `README.md` is generated from `index.json`. Descriptions on
-that page are the plain-language sentences in
-`scripts/render-registry-catalog.mjs`, so a new kit needs a sentence a
-marketer can read. Then, from the monorepo root:
+The table in `README.md` is generated from `index.json`. Titles, sentences,
+and themes live in `catalog-copy.json` (the same copy graphed.com/skills
+shows). Set `"hidden": true` on a pitch to leave that kit out of the
+graphed.com home carousel and `/skills` page. The README table still lists
+it. A new kit needs a sentence a marketer can read. Then, from the
+monorepo root:
 
 ```sh
 node scripts/render-registry-catalog.mjs --write
@@ -107,8 +109,8 @@ Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
    `/graphed:plugins:google-ads-agent`). Point that generated skill at
    `graphed plugins add` and the kit's `AGENT.md`.
 8. **Regenerate the catalog.** After adding or editing a plugin or skill in
-   `index.json`, add its marketer title and sentence in
-   `scripts/render-registry-catalog.mjs`, then run
+   `index.json`, add its marketer title, sentence, and themes in
+   `catalog-copy.json`, then run
    `node scripts/render-registry-catalog.mjs --write` from the monorepo root.
 
 ## Versioning
