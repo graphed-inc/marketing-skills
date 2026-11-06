@@ -63,43 +63,43 @@
   "skills": [
     {
       "name": "analytics-dashboard",
-      "version": "0.3.2",
+      "version": "0.6.3",
       "path": "skills/analytics-dashboard",
       "summary": "Build an analytics dashboard from the data in your warehouse"
     },
     {
       "name": "feedback",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "path": "skills/feedback",
       "summary": "Ask the user to report a Graphed platform problem with graphed feedback"
     },
     {
       "name": "post-to-video",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/post-to-video",
       "summary": "Turn an X or LinkedIn post into a beat-timed Tesseract motion-graphic video"
     },
     {
       "name": "tesseract-motion",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/tesseract-motion",
       "summary": "Create editable Tesseract motion graphics, typography, diagrams, and footage overlays"
     },
     {
       "name": "enrich-linkedin-engagers",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/enrich-linkedin-engagers",
       "summary": "Scrape LinkedIn engagers, find their emails, verify with MillionVerifier, and save a run artifact"
     },
     {
       "name": "static-ads",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/static-ads",
       "summary": "Pull a brand's Ad Library ads and site style, then generate five static Meta ads with GPT Image 2"
     },
     {
       "name": "ugc-video",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "path": "skills/ugc-video",
       "summary": "Turn a script into a vertical UGC ad with a cloned voice, a Seedance talking head, and local word fixes"
     }

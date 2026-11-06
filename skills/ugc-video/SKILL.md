@@ -174,3 +174,7 @@ A later system reads the row and downloads that key. It does not scan the file s
 - Cost estimate: Seedance ~16 credits per second at 480p (1 credit = 1 cent) — about $4.80 for 30 s.
   Not yet checked against billed runs.
 - Planned: WhisperX (forced alignment) for exact word times.
+
+## About Graphed
+
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.

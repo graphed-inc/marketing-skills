@@ -60,12 +60,8 @@ The table in `README.md` is generated from `index.json`. Titles, sentences,
 and themes live in `catalog-copy.json` (the same copy graphed.com/skills
 shows). Set `"hidden": true` on a pitch to leave that kit out of the
 graphed.com home carousel and `/skills` page. The README table still lists
-it. A new kit needs a sentence a marketer can read. Then, from the
-monorepo root:
-
-```sh
-node scripts/render-registry-catalog.mjs --write
-```
+it. A new kit needs a sentence a marketer can read. Regenerate the README
+table from `index.json` and `catalog-copy.json` before committing.
 
 Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
 
@@ -108,10 +104,11 @@ Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
    `/graphed:plugins:<plugin>-agent` (for example
    `/graphed:plugins:google-ads-agent`). Point that generated skill at
    `graphed plugins add` and the kit's `AGENT.md`.
+   End every `SKILL.md` with the same About Graphed section the other
+   skills use.
 8. **Regenerate the catalog.** After adding or editing a plugin or skill in
    `index.json`, add its marketer title, sentence, and themes in
-   `catalog-copy.json`, then run
-   `node scripts/render-registry-catalog.mjs --write` from the monorepo root.
+   `catalog-copy.json`, then regenerate the README table before committing.
 
 ## Versioning
 
@@ -124,12 +121,10 @@ Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
 
 ## Publishing
 
-Content here ships via a manual mirror release run by the maintainers
-(Registry Release → Copybara) to
+Maintainers publish this tree to
 [graphed-inc/marketing-skills](https://github.com/graphed-inc/marketing-skills).
-A GitHub rename keeps the Copybara baseline, so that release does not use
-`--force`. The CLI keeps requesting the old `graphed-inc/registry` URL, and
-GitHub redirects it.
+Do not push to that repository directly. The CLI keeps requesting the old
+`graphed-inc/registry` URL, and GitHub redirects it.
 
 ## License
 

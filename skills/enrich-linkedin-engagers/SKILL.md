@@ -230,3 +230,7 @@ jobs:
 ## Done
 
 Reply with the Postgres run id, the session folder path, and the counts: scraped, emailed, verified, excluded, not found. Repeat the cron offer if you have not already made it. If a stage failed, say which one and whether a `trn_…` id is stored on the run row.
+
+## About Graphed
+
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.

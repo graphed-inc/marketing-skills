@@ -1,15 +1,19 @@
 ---
 name: analytics-dashboard
-description: "Build an analytics dashboard from the data in your warehouse. Use when the user wants analytics, KPIs, or charts from connected sources: draw a large smooth chart and a bar breakdown, query with @graphed-inc/sdk, and skip tables unless they ask for rows."
+description: "Build an analytics dashboard from the data in your warehouse. Use when the user wants analytics, KPIs, or charts: copy the chart templates, add a date range the user can change, and query with @graphed-inc/sdk."
 ---
 
 # Analytics Dashboard
 
-Add a read-only analytics page to a Graphed cloud project. The page should
-look like a chart, not a report: a large smooth area chart, two scorecards,
-and a horizontal bar chart when there is a breakdown. Discover the
-warehouse, choose the board with the rules below, and query with
-`@graphed-inc/sdk`.
+Add a read-only analytics page to a Graphed cloud project. Discover the
+warehouse, ask which source and metric to show when you do not already know,
+query with `@graphed-inc/sdk`, and copy the chart templates in this skill.
+
+Do not ship the usual page: two scorecards, one area chart, and horizontal
+bars. That layout is not this skill. A page uses at least three chart types
+from `templates/charts.tsx` (line, area, columns, horizontal bars, donut,
+sparkline, calendar heatmap, histogram, matrix heatmap), plus the shadcn
+date picker when a date column exists.
 
 Do not invent schemas, tables, columns, endpoints, or parameter syntax. Do
 not edit the dashboard theme (`app/globals.css`, `tailwind.config.ts`, or
@@ -136,93 +140,73 @@ Measure:
 - Otherwise two or more measures and the user named none: ask which column.
   Do not write the page yet.
 
-Board, in this order:
+Pick one board. Do not mix in the old two-scorecard area page.
 
-1. Time series of that measure (or `count()`) for the latest 30 UTC days,
-   when a date column exists. Skip the chart when it does not, and say so.
-2. Two scorecards from those daily rows: the sum of the last 7 UTC days, and
-   the sum of the 30-day window. Do not add `count()` or `uniq()` queries
-   unless the user asked for a count or for uniques.
-3. A breakdown bar chart only when the user names the group-by column, or a
-   column's type contains `String`. Do not group by an identifier unless
-   they asked. One query, top rows by the measure, `LIMIT 8`.
+- **Board A** — a date column, one measure, and a string column (or the user
+  named a group-by). This is the usual warehouse table. Copy
+  `templates/page.tsx` and keep every chart on it: line, calendar heatmap,
+  weekday columns, histogram, matrix heatmap, donut, horizontal bars, and
+  the sparkline on the window scorecard.
+- **Board B** — a date column and one measure, and no string column the user
+  asked to group by. Copy the page, delete the donut card, the horizontal
+  bar card, and the matrix heatmap card. Do not call `loadMatrix`. Render
+  `AreaChart` instead of `LineChart`. Still keep the weekday columns, the
+  calendar heatmap, the histogram, the three scorecards, and the date picker.
+- **Board C** — no date column. Do not call `loadDaily`, `loadBreakdown`,
+  or `loadMatrix`. Those three queries filter on a date column. Call
+  `loadTotal()` for the scorecard and `loadGroups()` for the donut and the
+  horizontal bars. `loadTotal` and `loadGroups` have no date filter. Delete
+  the date picker, the line, the weekday columns, the calendar heatmap, the
+  histogram, and the matrix heatmap. Keep one scorecard of the total plus
+  the donut and the horizontal bars. Say that there is no time series.
 
-Show those numbers as charts. Do not render a table unless the user asked
-to see the rows. Say which table and column each number uses. Do not join
-across schemas unless they asked. Days with no rows are absent; do not fill
-them.
+A string column counts for Board A when its type contains `String` and its
+name is not `id` and does not end with `_id`, or when the user named it.
+Do not invent a breakdown for Board B. Do not render a table unless the user
+asked to see the rows. Say which table and column each number uses, in the
+muted line under the title. Do not join across schemas unless they asked.
+Days with no rows are absent from the line, the area, and the histogram.
+Do not fill those series with zeros. The calendar heatmap still draws every
+date in the window: a day with no row is an empty cell whose tooltip says
+"No rows". A measured zero stays a filled cell.
 
-The window includes today and stops there. `end` is today's UTC date,
-`YYYY-MM-DD`. `start` is 29 days before `end`, so the query covers 30
-calendar dates. The 7-day scorecard sums returned rows whose `day` is on or
-after 6 days before `end` (7 dates). Compute `start` and `end` in the page
-and pass both into SQL. Do not count dates after `end`.
+The default window includes today and stops there. `end` is today's UTC
+date, `YYYY-MM-DD`. `start` is 29 days before `end` (30 dates). The date
+range on the page replaces that default. A range longer than 366 inclusive
+dates keeps `end` and moves `start` forward. An invalid calendar date, such
+as `2026-99-99`, falls back to the default window. The previous scorecard
+uses the window of the same length immediately before `start`. Pass `start`
+and `end` into SQL. Do not count dates after `end`. `templates/dates.ts` is
+that math. Copy it. Do not reimplement the window.
 
 ## 3. Query with the SDK
 
 Install the client in the project when it is not already a dependency:
 
 ```sh
-npm install @graphed-inc/sdk
+npm install @graphed-inc/sdk -w @app/core
 ```
 
-Put the function in `packages/core/src/<route>.ts`. The dashboard imports
-`@app/core/<route>`. One `new Graphed()` in that module. Export
-`warehouseConfigured()` from the same module.
-
-```ts
-import { Graphed } from "@graphed-inc/sdk";
-
-const client = new Graphed();
-
-export function warehouseConfigured(): boolean {
-  return client.isConfigured();
-}
-
-export async function loadDaily(start: string, end: string): Promise<DailyRow[]> {
-  if (!client.isConfigured()) return [];
-  const { results } = await client.warehouse.query<DailyRow>(
-    `SELECT toDate(paid_at) AS day, sum(amount) AS value
-     FROM billing_acme.invoices
-     WHERE toDate(paid_at) >= toDate(%(start)s)
-       AND toDate(paid_at) <= toDate(%(end)s)
-     GROUP BY day
-     ORDER BY day`,
-    { start, end },
-  );
-  return results;
-}
-
-export interface DailyRow {
-  day: string;
-  value: number;
-}
-```
-
-Replace `billing_acme.invoices`, `paid_at`, and `amount` with the table,
-date column, and measure the rules picked. For `count()`, select
-`count() AS value` and drop the `sum`.
-
-A breakdown, only when section 2 asks for one:
-
-```ts
-const { results } = await client.warehouse.query<BreakdownRow>(
-  `SELECT ifNull(toString(channel), '(none)') AS label, sum(amount) AS value
-   FROM billing_acme.invoices
-   WHERE toDate(paid_at) >= toDate(%(start)s)
-     AND toDate(paid_at) <= toDate(%(end)s)
-   GROUP BY label
-   ORDER BY value DESC
-   LIMIT 8`,
-  { start, end },
-);
-```
+Copy `templates/query.ts` to `packages/core/src/<route>.ts`. The dashboard
+imports `@app/core/<route>`.
+One `new Graphed()` lives in that module. Replace only the schema, table,
+date column, measure, and group column inside the SQL strings. The daily,
+breakdown, matrix, total, and groups queries use those same identifiers.
+Do not invent another client, path, or parameter syntax. For `count()`,
+select `count() AS value` and drop the `sum`. Omit `loadBreakdown` on
+Board B. Omit `loadMatrix` on Board B. On Board C, call `loadTotal` and
+`loadGroups` only. `loadMatrix` keeps every week of the top six groups.
+Do not add a `LIMIT` that orders by week first. That drops the latest
+weeks once a table has many groups. A share chart is only for measures
+whose groups and window total are zero or positive. When `donutSlices`
+returns null, show the sentence from the page instead of the donut.
 
 Rules:
 
 - `isConfigured()` is true when `GRAPHED_TOKEN` or a constructor token is
-  set. An unconfigured `loadDaily` returns `[]`. The page checks
-  `warehouseConfigured()` first so a missing token is not the empty chart.
+  set. An unconfigured query returns the token failure from `query.ts`.
+  The page checks `warehouseConfigured()` first so a missing token is not
+  an empty chart.
 - Hosted services, jobs, and `graphed dev run` inject `GRAPHED_TOKEN`,
   `GRAPHED_WAREHOUSE_URL`, and `GRAPHED_TOOLS_URL`. Do not declare those
   names as secrets in `graphed.yaml`. Do not pass a token or URL unless you
@@ -261,261 +245,76 @@ Locally:
 graphed dev run --project <project_slug> --account <account_id> -- npm run dev
 ```
 
-## 4. Embed the charts
+## 4. Copy the templates
 
-The page is the chart. Cloud project dashboards do not use a chart library.
-Draw inline SVG inside shadcn `Card`s. A straight polyline and a data table
-are not the design. Do not add Recharts, visx, Nivo, or Chart.js. Do not
-edit the theme files. Put gradients in the SVG `<defs>`, using `#34d399`
-(the same green as `stroke-emerald-400`).
+Cloud dashboards do not use a chart library. The charts in this skill are
+inline SVG. Do not add Recharts, visx, Nivo, or Chart.js. Do not edit
+`app/globals.css`, `tailwind.config.ts`, or `app/layout.tsx`. Do not redraw
+the SVGs. Copy these files and change only the SQL identifiers, the titles,
+and the route name.
 
-Write these files and nothing under the theme:
+| Template | Copy to |
+| --- | --- |
+| `templates/query.ts` | `packages/core/src/<route>.ts` |
+| `templates/page.tsx` | `packages/dashboard/app/<route>/page.tsx` |
+| `templates/charts.tsx` | `packages/dashboard/app/<route>/charts.tsx` |
+| `templates/format.ts` | `packages/dashboard/app/<route>/format.ts` |
+| `templates/date-range.tsx` | `packages/dashboard/app/<route>/date-range.tsx` |
+| `templates/kpi-card.tsx` | `packages/dashboard/app/<route>/kpi-card.tsx` |
+| `templates/dates.ts` | `packages/dashboard/app/<route>/dates.ts` |
+| `templates/ui/calendar.tsx` | `packages/dashboard/components/ui/calendar.tsx` |
+| `templates/ui/popover.tsx` | `packages/dashboard/components/ui/popover.tsx` |
 
-- `packages/dashboard/app/<route>/page.tsx` — server component,
-  `export const dynamic = "force-dynamic"`.
-- `packages/dashboard/app/<route>/<route>-chart.tsx` — the area chart and
-  the bar chart.
-- `packages/dashboard/app/<route>/kpi-card.tsx` — the scorecard, with a
-  sparkline on the 30-day card.
-- Append one entry to `packages/dashboard/lib/plugins.ts`: `key`, `label`,
-  `href: "/<route>"`, `group` (the source name, or else the schema name),
-  `enabled: true`.
+`page.tsx` is Board A. For Board B or C, delete the cards the board section
+names. `AreaChart` is already exported from `charts.tsx`. Swap it in for
+`LineChart` on Board B.
 
-Compose `Card`, `CardHeader`, `CardTitle`, `CardDescription`, and
-`CardContent` from `components/ui/`. Add a missing shadcn component with
-`npx shadcn@latest add <name>`. Do not add `Table` unless the user asked
-to see the rows.
+The page wrapper is `w-full`. Do not add `max-w-5xl` or any other width cap.
+The shell already lets the page use the space beside the sidebar. The line,
+area, columns, bars, and histogram measure that width and draw across it.
+Hovering a mark shows the label and value. Keep that hover.
 
-Page order:
+Then append one entry to `packages/dashboard/lib/plugins.ts`: `key`, `label`,
+`href: "/<route>"`, `group` (the source name, or else the schema name),
+`enabled: true`.
 
-1. Token card or error card, only when that state is real.
-2. Two scorecards in `grid gap-4 md:grid-cols-2`.
-3. One full-width hero card. Title is the measure in plain language
-   ("Sessions"). Description is "Last 30 days". The chart is `h-80`.
-4. When section 2 includes a breakdown, a second card whose bars are the
-   chart. Title is the group column in plain language. No table under it.
+The date control is the shadcn date picker: `templates/ui/calendar.tsx`
+(`react-day-picker` v9, `mode="range"`) inside `templates/ui/popover.tsx`.
+Copy both into `components/ui/` before the page imports them. Install the
+two packages on the dashboard. Do not run `npx shadcn add`. That command
+rewrites `app/globals.css` and the theme.
 
-Token card copy, when `warehouseConfigured()` is false or the call throws
-`GraphedConfigError`:
-
-> Start the dashboard with `graphed dev run -- npm run dev` so
-> `GRAPHED_TOKEN` is present.
-
-Empty `data` returns the message div and no SVG. Rows whose values are all
-0 still draw the SVG. One series only, unless the user named a second
-metric. Set `aria-label` to the measure you actually plot.
-
-Shared helpers, in the chart file:
-
-```tsx
-export function compact(value: number): string {
-  const abs = Math.abs(value);
-  const digits = abs >= 1000 ? 1 : 0;
-  if (abs >= 1_000_000) return `${(value / 1_000_000).toFixed(digits)}m`;
-  if (abs >= 1_000) return `${(value / 1_000).toFixed(digits)}k`;
-  return Number.isInteger(value) ? String(value) : value.toFixed(1);
-}
-
-export function shortDay(day: string): string {
-  const date = new Date(`${day.slice(0, 10)}T00:00:00Z`);
-  if (Number.isNaN(date.getTime())) return day;
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
-function smoothLine(points: { x: number; y: number }[]): string {
-  const first = points[0];
-  if (!first) return "";
-  if (points.length === 1) return `M${first.x},${first.y}`;
-  let path = `M${first.x},${first.y}`;
-  for (let index = 0; index < points.length - 1; index += 1) {
-    const from = points[index];
-    const to = points[index + 1];
-    if (!from || !to) continue;
-    const mid = (from.x + to.x) / 2;
-    path += ` C${mid},${from.y} ${mid},${to.y} ${to.x},${to.y}`;
-  }
-  return path;
-}
-
-function clipLabel(label: string | null): string {
-  const text = label == null || label === "" ? "(none)" : label;
-  return text.length > 28 ? `${text.slice(0, 27)}…` : text;
-}
+```sh
+npm install react-day-picker@^9.7.0 @radix-ui/react-popover@^1.1.14 -w @app/dashboard
 ```
 
-Hero chart. Copy this shape. Keep the gradient, the soft understroke, the
-dashed grid, the three date labels, and the peak plus last-point dots.
+`templates/date-range.tsx` is a client component. Preset links and the
+picker's Apply button navigate to `?start=YYYY-MM-DD&end=YYYY-MM-DD`. The
+server page reads those search params and passes them to `loadDaily`,
+`loadBreakdown`, and `loadMatrix`. Changing the dates must change the
+numbers on every chart. Do not hard-code the window after the first render.
+Format a picked day with `getFullYear`, `getMonth`, and `getDate`. Do not
+turn that Date into a day with `toISOString()`, which can shift the day.
 
-```tsx
-export function TrendChart({
-  data,
-  label,
-}: {
-  data: { day: string; value: number }[];
-  label: string;
-}) {
-  if (data.length === 0) {
-    return (
-      <div className="flex h-80 items-center justify-center text-sm text-muted-foreground">
-        No rows in this window.
-      </div>
-    );
-  }
+Chart types in `charts.tsx`, and when the copied page uses them:
 
-  const width = 720;
-  const height = 320;
-  const pad = { top: 24, right: 20, bottom: 36, left: 52 };
-  const innerW = width - pad.left - pad.right;
-  const innerH = height - pad.top - pad.bottom;
-  const values = data.map((row) => row.value);
-  const minValue = Math.min(0, ...values);
-  const maxValue = Math.max(0, ...values);
-  const span = maxValue - minValue || 1;
-  const yFor = (value: number) =>
-    pad.top + innerH - ((value - minValue) / span) * innerH;
-  const points = data.map((row, index) => {
-    const x =
-      pad.left +
-      (data.length === 1 ? innerW / 2 : (index / (data.length - 1)) * innerW);
-    return { x, y: yFor(row.value), row };
-  });
-  const line = smoothLine(points);
-  const zeroY = yFor(0);
-  const area = `${line} L${points[points.length - 1]?.x ?? pad.left},${zeroY} L${points[0]?.x ?? pad.left},${zeroY} Z`;
-  const peak = points.reduce((best, point) =>
-    point.row.value > best.row.value ? point : best,
-  );
-  const last = points[points.length - 1] ?? peak;
-  const tickValues = minValue < 0 ? [minValue, 0, maxValue] : [0, maxValue / 2, maxValue];
-  const ticks = tickValues.map((value) => ({
-    y: yFor(value),
-    text: compact(value),
-  }));
-  const dateIndexes = [0, Math.floor((data.length - 1) / 2), data.length - 1];
+- **Line** — daily trend on Board A. Smooth stroke, glow, peak and last dots.
+- **Area** — daily trend on Board B. Gradient down to the zero line.
+- **Columns** — weekday totals from the same daily rows. Rounded gradient bars.
+- **Calendar heatmap** — one cell per date in the window, weeks across and
+  Monday–Sunday down. A day with no row is a blank cell. This is the only
+  chart that paints dates the query did not return.
+- **Histogram** — how the daily values spread, in contiguous buckets.
+- **Matrix heatmap** — top groups by week, from `loadMatrix`
+  (`toMonday(toDate(<date_column>))`). Board A only.
+- **Horizontal bars** — top 8 groups. A zero value draws no bar.
+- **Donut** — top 5 groups plus Other (window total minus those five).
+- **Sparkline** — the daily series inside the window scorecard.
 
-  return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-80 w-full" role="img" aria-label={label}>
-      <defs>
-        <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#34d399" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {ticks.map((tick) => (
-        <g key={`${tick.text}-${tick.y}`}>
-          <line
-            x1={pad.left}
-            x2={width - pad.right}
-            y1={tick.y}
-            y2={tick.y}
-            stroke="currentColor"
-            className="text-border"
-            strokeDasharray="3 6"
-          />
-          <text x={pad.left - 10} y={tick.y + 4} textAnchor="end" className="fill-muted-foreground text-[11px]">
-            {tick.text}
-          </text>
-        </g>
-      ))}
-      <path d={area} fill="url(#trend-fill)" />
-      <path d={line} fill="none" className="stroke-emerald-400/30" strokeWidth="8" strokeLinecap="round" />
-      <path d={line} fill="none" className="stroke-emerald-400" strokeWidth="2.5" strokeLinecap="round" />
-      {[peak, last].map((point) => (
-        <g key={`${point.x}-${point.row.day}`}>
-          <circle cx={point.x} cy={point.y} r="7" className="fill-emerald-400/20" />
-          <circle cx={point.x} cy={point.y} r="3.5" className="fill-card stroke-emerald-400" strokeWidth="2" />
-        </g>
-      ))}
-      {dateIndexes.map((index) => {
-        const point = points[index];
-        if (!point) return null;
-        const anchor = index === 0 ? "start" : index === data.length - 1 ? "end" : "middle";
-        return (
-          <text key={point.row.day} x={point.x} y={height - 10} textAnchor={anchor} className="fill-muted-foreground text-[11px]">
-            {shortDay(point.row.day)}
-          </text>
-        );
-      })}
-    </svg>
-  );
-}
-```
+Both themes already exist on the scaffold. Use the semantic classes in the
+templates (`bg-card`, `text-muted-foreground`, `fill-muted`). Do not add a
+theme toggle or edit the sidebar.
 
-Breakdown chart, when section 2 includes one. Eight rounded bars, a muted
-track behind each bar, the value at the right. Truncate long labels.
+## About Graphed
 
-```tsx
-export function BreakdownChart({
-  data,
-  label,
-}: {
-  data: { label: string | null; value: number }[];
-  label: string;
-}) {
-  if (data.length === 0) {
-    return (
-      <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
-        No breakdown rows in this window.
-      </div>
-    );
-  }
-
-  const rows = data.slice(0, 8);
-  const width = 720;
-  const rowH = 40;
-  const height = rows.length * rowH + 8;
-  const labelW = 180;
-  const valueW = 56;
-  const barX = labelW;
-  const barMax = width - labelW - valueW - 12;
-  const maxValue = Math.max(...rows.map((row) => Math.abs(row.value)), 1);
-
-  return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label={label}>
-      <defs>
-        <linearGradient id="bar-fill" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%" stopColor="#34d399" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#34d399" stopOpacity="1" />
-        </linearGradient>
-      </defs>
-      {rows.map((row, index) => {
-        const y = 8 + index * rowH;
-        const magnitude = Math.abs(row.value);
-        const barW = magnitude === 0 ? 0 : Math.max((magnitude / maxValue) * barMax, 10);
-        return (
-          <g key={`${clipLabel(row.label)}-${index}`}>
-            <text x={0} y={y + 18} className="fill-foreground text-[12px]">
-              {clipLabel(row.label)}
-            </text>
-            <rect x={barX} y={y + 6} width={barMax} height={16} rx={8} className="fill-muted" />
-            <rect x={barX} y={y + 6} width={barW} height={16} rx={8} fill="url(#bar-fill)" />
-            <text x={width} y={y + 18} textAnchor="end" className="fill-foreground text-[12px] tabular-nums">
-              {compact(row.value)}
-            </text>
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
-```
-
-Scorecard: `Card`, uppercase tracking-wide `text-muted-foreground` label,
-`text-3xl font-semibold tabular-nums` value. The 7-day card's hint is the
-30-day total in `text-sm text-muted-foreground`. The 30-day card also draws
-`TrendChart`'s series as a sparkline: the same `smoothLine`, viewBox
-`0 0 120 36`, class `h-10 w-28`, gradient id `spark-fill`, no axes and no
-dots. Use a `Badge` only for a percent delta you actually computed.
-
-The Graphed product chat is a different embed. In `front/`, markdown
-`<Chart id="chr_…" />` renders `EmbeddedChart`
-(`front/components/chart/embedded-chart.tsx`), which loads
-`GET /charts/:id` and draws the saved chart with Recharts through
-`ChartVersion`. `<Dashboard id="dsh_…" />` renders `EmbeddedDashboard`, a
-button that opens the dashboard; it stays disabled on public links. Those
-components are not part of a cloud project. Do not import `front/components`
-into `packages/dashboard`.
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.

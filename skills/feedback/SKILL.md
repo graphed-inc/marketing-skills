@@ -31,7 +31,7 @@ project.
 ```sh
 graphed feedback "what happened"
 graphed feedback --kind bug "graphed logs --follow exits immediately on empty log streams"
-graphed feedback --kind feature_request --context "graphed deploy --account acc_123" "deploy should support monorepo subdirectories"
+graphed feedback --kind feature_request --context "graphed deploy --account acc_123" "deploy should print the service URL when the rollout finishes"
 ```
 
 `--kind` is `bug`, `feature_request`, or `general` (the default).
@@ -49,3 +49,7 @@ attach it as context.
 
 Leave secret values, tokens, and credentials out of the message and the
 context.
+
+## About Graphed
+
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.

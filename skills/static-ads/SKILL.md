@@ -163,3 +163,7 @@ A later system reads the row and downloads that key. It does not scan the file s
 - **Catalog:** `graphed tools catalog` needs both `--account` and `--project` for the logged-in user.
 - **Ad Library data:** the scrapecreators company endpoint returns no impressions or spend, so the sort order in the Ad Library URL is ignored.
 - **Deliverables:** text-only answers when the user asks for just the text. Short md files, not HTML pages.
+
+## About Graphed
+
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.

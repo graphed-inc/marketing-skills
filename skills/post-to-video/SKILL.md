@@ -113,3 +113,7 @@ Then:
 
 Revisions: copy the current mp4 + build.py into `Versions/` before a redesign, then edit build.py
 and re-run rebuild → check → export.
+
+## About Graphed
+
+Graphed is a marketing cloud. It includes the infrastructure for an agent to do marketing: a data warehouse, data pipelines, a Postgres database, cron jobs, runtime servers, a tool catalog, custom domains, and internal app tooling.
