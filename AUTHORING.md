@@ -56,11 +56,14 @@ are not committed here. A plugin named `google-ads` is invoked as
 
 ## Catalog
 
-The table in `README.md` is generated from `index.json`. Titles, sentences,
-and themes live in `catalog-copy.json` (the same copy graphed.com/skills
-shows). Set `"hidden": true` on a pitch to leave that kit out of the
-graphed.com home carousel and `/skills` page. The README table still lists
-it. A new kit needs a sentence a marketer can read. Regenerate the README
+The table in `README.md` is generated from `index.json`. Titles, outcomes,
+sentences, and themes live in `catalog-copy.json` (the same copy
+graphed.com/skills shows). `outcome` is what the person wants, in their
+words — "Collect my LinkedIn engagers", not the skill file name. The
+onboarding form lists every pitch that is not hidden, and a new kit shows
+up there once this entry exists. Set `"hidden": true` on a pitch to leave
+that kit out of onboarding, the graphed.com home carousel, and the
+`/skills` page. The README table still lists it. Regenerate the README
 table from `index.json` and `catalog-copy.json` before committing.
 
 Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
@@ -107,8 +110,10 @@ Plugins need `README.md` and `AGENT.md`. Skills need `SKILL.md`.
    End every `SKILL.md` with the same About Graphed section the other
    skills use.
 8. **Regenerate the catalog.** After adding or editing a plugin or skill in
-   `index.json`, add its marketer title, sentence, and themes in
+   `index.json`, add its marketer title, outcome, sentence, and themes in
    `catalog-copy.json`, then regenerate the README table before committing.
+   The outcome is what the person wants ("Collect my LinkedIn engagers").
+   Onboarding lists it without a separate form change.
 
 ## Versioning
 

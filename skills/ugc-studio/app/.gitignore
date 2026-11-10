@@ -1,0 +1,10 @@
+node_modules/
+.data/
+.env
+.env.local
+.graphed.json
+__pycache__/
+.next/
+.next-dev/
+dist/
+*.tsbuildinfo

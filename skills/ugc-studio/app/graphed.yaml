@@ -1,0 +1,18 @@
+slug: ugc-studio
+name: UGC Studio
+
+databases:
+  primary:
+    env: DATABASE_URL
+
+release:
+  command: npm run db:migrate
+  timeout_seconds: 600
+  retries: 1
+
+services:
+  web:
+    command: node packages/dashboard/serve.cjs
+    port: 3000
+    healthcheck: /health
+    # No public paths: the whole app sits behind the Graphed gateway (graphed.com login).

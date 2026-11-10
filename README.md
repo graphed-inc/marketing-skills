@@ -20,8 +20,11 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [Post to video](skills/post-to-video/SKILL.md) | Turns one X or LinkedIn post into a short motion-graphic video, timed to a music beat. | [Instructions](skills/post-to-video/SKILL.md) |
 | [Tesseract motion](skills/tesseract-motion/SKILL.md) | Builds an editable motion graphic in Tesseract: type, diagrams, lower thirds, and overlays on footage. | [Instructions](skills/tesseract-motion/SKILL.md) |
 | [LinkedIn engagers](skills/enrich-linkedin-engagers/SKILL.md) | Pulls people who engaged with a LinkedIn profile or post, finds their emails, and verifies which ones can be delivered. | [Instructions](skills/enrich-linkedin-engagers/SKILL.md) |
+| [Post engagers](skills/post-engagers/SKILL.md) | Deploys a LinkedIn lead tool for your team. Paste a post, or track a profile every day, and get everyone who reacted or commented, with their profile and a verified work email. | [Instructions](skills/post-engagers/SKILL.md) |
+| [Enrichment tables](skills/enrichment-tables/SKILL.md) | Deploys a spreadsheet for lead lists. Each column finds something for every row: people, work emails, phone numbers, company data, or AI research, and you export the result as CSV. | [Instructions](skills/enrichment-tables/SKILL.md) |
 | [Static ads](skills/static-ads/SKILL.md) | Reads a brand's current ads and website, then generates static Meta ads aimed at the angles those ads miss. | [Instructions](skills/static-ads/SKILL.md) |
 | [UGC video](skills/ugc-video/SKILL.md) | Turns a script into a finished vertical talking-head video ad. A cloned voice reads the script, the avatar is rendered speaking it, and missed words are fixed on your machine. | [Instructions](skills/ugc-video/SKILL.md) |
+| [UGC studio](skills/ugc-studio/SKILL.md) | Deploys a video studio for your team. Write scripts from your website, pick avatars, and render a grid of talking-head ads in parallel, each checked word by word against the script. | [Instructions](skills/ugc-studio/SKILL.md) |
 
 <!-- catalog:end -->
 

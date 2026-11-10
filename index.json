@@ -92,8 +92,20 @@
       "summary": "Scrape LinkedIn engagers, find their emails, verify with MillionVerifier, and save a run artifact"
     },
     {
+      "name": "post-engagers",
+      "version": "0.1.0",
+      "path": "skills/post-engagers",
+      "summary": "Deploy a hosted LinkedIn post-engagers app: post or tracked-profile engagers, full profiles, GetLeads → LeadMagic → Apollo emails verified with MillionVerifier, table + CSV"
+    },
+    {
+      "name": "enrichment-tables",
+      "version": "0.1.0",
+      "path": "skills/enrichment-tables",
+      "summary": "Deploy a hosted Clay-style enrichment table: lead search, email/phone waterfalls verified with MillionVerifier, company data, AI web research, formulas, HTTP columns, CSV"
+    },
+    {
       "name": "static-ads",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "path": "skills/static-ads",
       "summary": "Pull a brand's Ad Library ads and site style, then generate five static Meta ads with GPT Image 2"
     },
@@ -102,6 +114,12 @@
       "version": "0.2.1",
       "path": "skills/ugc-video",
       "summary": "Turn a script into a vertical UGC ad with a cloned voice, a Seedance talking head, and local word fixes"
+    },
+    {
+      "name": "ugc-studio",
+      "version": "0.1.0",
+      "path": "skills/ugc-studio",
+      "summary": "Deploy a hosted UGC video studio: campaigns of scripts x avatars, 65 built-in avatars, scripts from your website's Reddit pains, parallel Seedance renders with word fixes"
     }
   ]
 }

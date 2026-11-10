@@ -1,0 +1,23 @@
+slug: enrichment-tables
+name: Tables
+
+# Scaffold provenance. The Graphed CLI reads this to check plugin
+# compatibility; it is stripped on deploy and never sent to the server.
+scaffold:
+  name: base
+  version: 0.1.0
+
+databases:
+  primary:
+    env: DATABASE_URL
+
+release:
+  command: npm run db:migrate
+  timeout_seconds: 600
+  retries: 1
+
+services:
+  dashboard:
+    command: node packages/dashboard/.next/standalone/packages/dashboard/server.js
+    port: 3000
+    healthcheck: /api/health

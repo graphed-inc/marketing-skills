@@ -1,0 +1,8 @@
+**/node_modules
+**/.next
+**/.next-dev
+dist
+.git
+.env*
+.graphed
+.data

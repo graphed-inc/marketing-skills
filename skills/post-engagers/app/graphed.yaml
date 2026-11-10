@@ -1,0 +1,34 @@
+slug: post-engagers
+name: Post Engagers
+
+# Scaffold provenance. The Graphed CLI reads this to check plugin
+# compatibility; it is stripped on deploy and never sent to the server.
+scaffold:
+  name: base
+  version: 0.1.0
+
+databases:
+  primary:
+    env: DATABASE_URL
+
+release:
+  command: npm run db:migrate
+  timeout_seconds: 600
+  retries: 1
+
+services:
+  # No public paths: the whole app sits behind the Graphed gateway (graphed.com login).
+  web:
+    command: node packages/dashboard/.next/standalone/packages/dashboard/server.js
+    port: 3000
+    healthcheck: /api/health
+
+jobs:
+  # Daily: check every tracked profile for new posts and queue them (7am Mountain).
+  track:
+    command: node cli.mjs track check
+    schedule:
+      cron: "0 7 * * *"
+      timezone: America/Denver
+    timeout_seconds: 1800
+    retries: 1

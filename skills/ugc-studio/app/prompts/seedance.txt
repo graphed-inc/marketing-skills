@@ -1,0 +1,26 @@
+[Generation Goal]
+Vertical 9:16 selfie video, shot on an iPhone front-facing camera at arm's length: the person from [Image1] filming themselves and talking to the viewer the whole way, lip-syncing to [Audio1]. One continuous take, {duration} seconds.
+
+[Reference Material Roles]
+[Image1] defines the person and the place: face, hair, build, clothes and the room behind them, carried identically for the full video. [Audio1] defines the voice and the complete dialogue. The dialogue is reused from [Audio1] verbatim: the same words, the same number of words, in the same order, at the same timing, and it is the only speech in the video. Their mouth follows [Audio1]. [Audio1] does not define the camera, the body or the place.
+
+[Dialogue]
+In natural conversational English, the person says, word for word as recorded in [Audio1]: "{dialogue}" This text and [Audio1] are the same dialogue; [Audio1] supplies the voice and the timing. No words are added, removed or changed. They are already mid-sentence on the first frame. After the last word of [Audio1] they keep their lips naturally closed without speaking further and stay in the shot, still moving a little, until the video ends.
+
+[Camera]
+Front-facing wide-angle selfie lens, subtle barrel distortion, face in the upper-center third of frame, torso and one shoulder visible, the extended arm just barely in frame at the bottom edge. Continuous handheld motion, small natural sway, micro-shakes, tiny reframes. Autofocus breathing, slow gradual exposure shifts. No tripod, no gimbal, no zoom, no cut, no cinematic camera moves.
+
+[Performance]
+Relaxed and casual, like sending a quick video to a friend. Steady eye contact with the lens most of the time, an occasional short glance away. Expressions small and real: a slight smirk at most, a small nod, never wide-eyed, never a big smile, never theatrical. Small head movements, natural blinking and breathing. Mouth movements match [Audio1] exactly without over-articulating. The body stays calm so the speech never has to change to fit a movement.
+
+[Picture Quality and Lighting]
+Raw unpolished UGC, iPhone-native color, mild digital noise in the shadows, slightly soft, no color grade. The room's own light from [Image1] is the only light: soft and even on the face. No rim light, no halo or glow around the head, no lens flare, no flashes, no flicker, brightness steady from first frame to last.
+
+[No Words On Screen]
+No captions, no subtitles, no titles, no logos, no watermarks, no text overlay of any kind, no b-roll, no split screen.
+
+[Audio]
+Audio is [Audio1] passed through unchanged, at its original speed and full length. No generated speech, no added or removed words, no narration, no music, no other voices. Under it, only faint natural room tone.
+
+[Maintain Consistency]
+The same person and the same place from [Image1] from first frame to last. Expressions small the whole way. One continuous take, no cuts, no transitions.

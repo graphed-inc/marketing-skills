@@ -157,7 +157,7 @@ A later system reads the row and downloads that key. It does not scan the file s
 
 ## Gotchas
 
-- **Model:** use `kie:gpt-image-2-image-to-image`. The catalog has no "GPT Image 2.5", so if the user asks for 2.5, use 2 and say so.
+- **Model:** `generate.sh` uses `kie:gpt-image-2-image-to-image`. ChatGPT Images 2.5 is in the catalog as GPT Image 2.5 Flare (`kie:gpt-image-2-5-flare-image-to-image`) and Sunburst (`kie:gpt-image-2-5-sunburst-image-to-image`). Use Sunburst when the user asks for 2.5.
 - **Aspect ratio:** `4:5` is rejected. Generate at `3:4`. `generate.sh` center-crops the file to 1080×1350, which is the Meta 4:5 size. The crop uses `sips`, which is on Mac. On Windows, `sips` is missing and that ad prints `FAILED`. The uncropped PNG may already be on disk. Replace it with a 1080×1350 crop from ImageMagick (`magick`) or `ffmpeg`, then rerun. The script skips generation for an existing PNG and still uploads it.
 - **Timeouts:** a `--wait` timeout does not kill the run. Get the result with `graphed tools get <trn_id> --account <account> --project <project> --out`. Never re-run, because that pays twice.
 - **Catalog:** `graphed tools catalog` needs both `--account` and `--project` for the logged-in user.
