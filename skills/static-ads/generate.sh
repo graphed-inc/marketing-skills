@@ -153,6 +153,44 @@ print(f"cropped to 1080x1350")
 PY
 }
 
+# Latest tools-run status printed in a log. Empty when the CLI has not printed one.
+# graphed tools get --out throws without writing a file when the run is not ready,
+# so a failed run has to be read from this status or the poll never ends.
+tool_run_status() {
+  python3 - "$1" << 'PY'
+import json, sys
+path = sys.argv[1]
+try:
+    text = open(path, encoding="utf-8", errors="replace").read()
+except OSError:
+    print("")
+    raise SystemExit
+status = ""
+decoder = json.JSONDecoder()
+idx = 0
+while True:
+    start = text.find("{", idx)
+    if start < 0:
+        break
+    try:
+        obj, end = decoder.raw_decode(text, start)
+    except json.JSONDecodeError:
+        idx = start + 1
+        continue
+    if (
+        isinstance(obj, dict)
+        and isinstance(obj.get("id"), str)
+        and obj["id"].startswith("trn_")
+        and isinstance(obj.get("status"), str)
+    ):
+        status = obj["status"]
+    idx = end
+if not status and "ended in failed" in text:
+    status = "failed"
+print(status)
+PY
+}
+
 gen() {
   local k="$1"
   if [ "$DRY" = "--dry-run" ]; then
@@ -162,13 +200,30 @@ gen() {
   [ -s "$k.png" ] && { echo "$k: exists, skip"; return; }
   graphed tools run "$TOOL" --account "$ACCT" --project "$PROJ" --wait --timeout 400 \
     --out "$k.res.json" --body "$(cat "$k.req.json")" >"$k.log" 2>&1
-  # --wait timing out does not kill the run: poll it until the result lands
+  # --wait timing out does not kill the run. Poll until it is ready.
+  # A failed run never writes --out. Stop there and mark the ad FAILED.
   local run; run=$(grep -oE 'trn_[a-z0-9]+' "$k.log" | head -1)
+  local status; status=$(tool_run_status "$k.log")
   local tries=0
-  while [ ! -s "$k.res.json" ] && [ -n "$run" ] && [ $tries -lt 20 ]; do
-    sleep 30; tries=$((tries+1))
-    graphed tools get "$run" --account "$ACCT" --project "$PROJ" --out "$k.res.json" >>"$k.log" 2>&1
+  while [ ! -s "$k.res.json" ] && [ -n "$run" ] && [ "$tries" -lt 20 ]; do
+    if [ -n "$status" ] && [ "$status" != "pending" ] && [ "$status" != "ready" ]; then
+      break
+    fi
+    if [ "$status" = "ready" ]; then
+      graphed tools get "$run" --account "$ACCT" --project "$PROJ" --out "$k.res.json" >>"$k.log" 2>&1
+      if [ -s "$k.res.json" ]; then
+        break
+      fi
+    fi
+    sleep 30
+    tries=$((tries + 1))
+    graphed tools get "$run" --account "$ACCT" --project "$PROJ" >>"$k.log" 2>&1
+    status=$(tool_run_status "$k.log")
   done
+  # The poll that uses the last try can be the one that becomes ready.
+  if [ "$status" = "ready" ] && [ ! -s "$k.res.json" ] && [ -n "$run" ]; then
+    graphed tools get "$run" --account "$ACCT" --project "$PROJ" --out "$k.res.json" >>"$k.log" 2>&1
+  fi
   local url; url=$(python3 -c "import json;print(json.load(open('$k.res.json'))['resultUrls'][0])" 2>/dev/null)
   if [ -n "$url" ] && curl -sL "$url" -o "$k.png" && crop_meta "$k.png"; then
     echo "$k: done"

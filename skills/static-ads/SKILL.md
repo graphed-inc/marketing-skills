@@ -98,7 +98,7 @@ Then run:
 
 `--dry-run` reads the request files and prints each ad's aspect ratio, resolution, prompt length, and reference count. It does not call Graphed and does not spend credits. That is the point: catch a bad request before the image run.
 
-The real run generates every ad in parallel, polls any run that outlives `--wait`, center-crops each PNG to 1080×1350, copies those files to `~/Downloads/<slug>-ads/`, and uploads them to the project at `static-ads/<slug>-ads/<name>.png`. It skips an ad that already has a PNG. Then record each uploaded file so it can be found later. See [Find them later](#find-them-later).
+The real run generates every ad in parallel and polls any run that is still going after `--wait`. A run whose status is `failed` stops immediately, and that ad prints `FAILED`, so the rest of the batch can finish. It center-crops each PNG to 1080×1350, copies those files to `~/Downloads/<slug>-ads/`, and uploads them to the project at `static-ads/<slug>-ads/<name>.png`. It skips an ad that already has a PNG. Then record each uploaded file so it can be found later. See [Find them later](#find-them-later).
 
 ## 5. Review
 
@@ -159,7 +159,7 @@ A later system reads the row and downloads that key. It does not scan the file s
 
 - **Model:** `generate.sh` uses `kie:gpt-image-2-image-to-image`. ChatGPT Images 2.5 is in the catalog as GPT Image 2.5 Flare (`kie:gpt-image-2-5-flare-image-to-image`) and Sunburst (`kie:gpt-image-2-5-sunburst-image-to-image`). Use Sunburst when the user asks for 2.5.
 - **Aspect ratio:** `4:5` is rejected. Generate at `3:4`. `generate.sh` center-crops the file to 1080×1350, which is the Meta 4:5 size. The crop uses `sips`, which is on Mac. On Windows, `sips` is missing and that ad prints `FAILED`. The uncropped PNG may already be on disk. Replace it with a 1080×1350 crop from ImageMagick (`magick`) or `ffmpeg`, then rerun. The script skips generation for an existing PNG and still uploads it.
-- **Timeouts:** a `--wait` timeout does not kill the run. Get the result with `graphed tools get <trn_id> --account <account> --project <project> --out`. Never re-run, because that pays twice.
+- **Timeouts:** a `--wait` timeout does not kill the run. Get the result with `graphed tools get <trn_id> --account <account> --project <project> --out`. Never re-run, because that pays twice. If that get shows status `failed`, the run is finished. `generate.sh` stops polling that ad and prints `FAILED`.
 - **Catalog:** `graphed tools catalog` needs both `--account` and `--project` for the logged-in user.
 - **Ad Library data:** the scrapecreators company endpoint returns no impressions or spend, so the sort order in the Ad Library URL is ignored.
 - **Deliverables:** text-only answers when the user asks for just the text. Short md files, not HTML pages.
