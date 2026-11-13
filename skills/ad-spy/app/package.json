@@ -1,0 +1,28 @@
+{
+  "name": "ad-spy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run -w @app/dashboard dev",
+    "build": "npm run -w @app/dashboard build",
+    "typecheck": "tsc --noEmit",
+    "test": "env -u DATABASE_URL -u REPLICA_DATABASE_URL -u GRAPHED_STORAGE_ENDPOINT PGLITE_DIR=memory MEDIA_DIR=./.data/test-media tsx packages/core/src/ad-spy.test.ts",
+    "db:migrate": "npm run -w @app/core db:migrate",
+    "start": "npm run -w @app/dashboard start"
+  },
+  "dependencies": {
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "typescript": "^5.6.0"
+  }
+}

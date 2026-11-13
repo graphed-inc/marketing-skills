@@ -25,6 +25,7 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [Static ads](skills/static-ads/SKILL.md) | Reads a brand's current ads and website, then generates static Meta ads aimed at the angles those ads miss. | [Instructions](skills/static-ads/SKILL.md) |
 | [UGC video](skills/ugc-video/SKILL.md) | Turns a script into a finished vertical talking-head video ad. A cloned voice reads the script, the avatar is rendered speaking it, and missed words are fixed on your machine. | [Instructions](skills/ugc-video/SKILL.md) |
 | [UGC studio](skills/ugc-studio/SKILL.md) | Deploys a video studio for your team. Write scripts from your website, pick avatars, and render a grid of talking-head ads in parallel, each checked word by word against the script. | [Instructions](skills/ugc-studio/SKILL.md) |
+| [Ad spy](skills/ad-spy/SKILL.md) | Deploys a competitor ad library that pulls Meta, Google and LinkedIn ads every day, plus a heat map of what your buyers say that no competitor ad says yet, with ad ideas for each gap. | [Instructions](skills/ad-spy/SKILL.md) |
 
 <!-- catalog:end -->
 

@@ -120,6 +120,12 @@
       "version": "0.1.0",
       "path": "skills/ugc-studio",
       "summary": "Deploy a hosted UGC video studio: campaigns of scripts x avatars, 65 built-in avatars, scripts from your website's Reddit pains, parallel Seedance renders with word fixes"
+    },
+    {
+      "name": "ad-spy",
+      "version": "0.1.0",
+      "path": "skills/ad-spy",
+      "summary": "Deploy a hosted ad spy app: daily Meta, Google and LinkedIn ad library pulls, creatives in project storage, Gemini 2.5 Flash transcripts and tags in Postgres, and a persona-matrix heat map of customer demand vs competitor ads"
     }
   ]
 }

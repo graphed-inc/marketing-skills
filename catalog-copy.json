@@ -92,5 +92,12 @@
     "detail": "Write scripts, pick avatars, and render them together.",
     "summary": "Deploys a video studio for your team. Write scripts from your website, pick avatars, and render a grid of talking-head ads in parallel, each checked word by word against the script.",
     "themes": ["Video", "Ads"]
+  },
+  "ad-spy": {
+    "title": "Ad spy",
+    "outcome": "Spy on competitor ads",
+    "detail": "See what they run and the gaps they leave.",
+    "summary": "Deploys a competitor ad library that pulls Meta, Google and LinkedIn ads every day, plus a heat map of what your buyers say that no competitor ad says yet, with ad ideas for each gap.",
+    "themes": ["Ads", "Creative"]
   }
 }
