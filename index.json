@@ -69,9 +69,9 @@
     },
     {
       "name": "feedback",
-      "version": "0.1.2",
+      "version": "0.2.2",
       "path": "skills/feedback",
-      "summary": "Ask the user to report a Graphed platform problem with graphed feedback"
+      "summary": "Ask the user to open a Graphed ticket with graphed tickets open"
     },
     {
       "name": "post-to-video",
