@@ -1,5 +1,8 @@
 import { pathToFileURL } from "node:url";
-import { Migrator, type Migration, type MigrationProvider } from "kysely";
+// Kysely 0.29 removed the runtime Migrator export from the package root.
+// `import { Migrator } from "kysely"` fails with
+// "does not provide an export named 'Migrator'".
+import { Migrator, type Migration, type MigrationProvider } from "kysely/migration";
 import { destroyDb, initDb } from "./index";
 import * as adSpy from "../migrations/0001_ad_spy";
 import * as adTags from "../migrations/0002_ad_tags";
