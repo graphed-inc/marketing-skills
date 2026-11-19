@@ -99,5 +99,12 @@
     "detail": "See what they run and the gaps they leave.",
     "summary": "Deploys a competitor ad library that pulls Meta, Google and LinkedIn ads every day, plus a heat map of what your buyers say that no competitor ad says yet, with ad ideas for each gap.",
     "themes": ["Ads", "Creative"]
+  },
+  "ai-video-editor": {
+    "title": "AI video editor",
+    "outcome": "Edit my podcast with an agent",
+    "detail": "Upload the raw files, review each cut, leave notes.",
+    "summary": "Deploys a video review and editing app for your team. Upload your cameras and mics, and your agent cuts the episode, renders it in minutes, and applies the notes you leave on the video.",
+    "themes": ["Video", "Content"]
   }
 }

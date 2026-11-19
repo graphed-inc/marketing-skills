@@ -126,6 +126,12 @@
       "version": "0.1.1",
       "path": "skills/ad-spy",
       "summary": "Deploy a hosted ad spy app: daily Meta, Google and LinkedIn ad library pulls, creatives in project storage, Gemini 2.5 Flash transcripts and tags in Postgres, and a persona-matrix heat map of customer demand vs competitor ads"
+    },
+    {
+      "name": "ai-video-editor",
+      "version": "0.1.0",
+      "path": "skills/ai-video-editor",
+      "summary": "Deploy a hosted video review and editing app: upload cameras, mics and screen recordings, word-by-word transcripts, an agent-written edit document rendered on parallel Modal sandboxes (a one-hour podcast in about 4 minutes), frame comments, script cuts and an @agent task queue"
     }
   ]
 }

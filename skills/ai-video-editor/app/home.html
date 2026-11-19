@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex">
+<title>AI Video Editor</title>
+<style>
+  /* clay-tables look: shadcn/ui tokens (new-york, light only), orange #ff7700, ink #131316 */
+  :root {
+    color-scheme: light;
+    --background: #fff; --foreground: #131316; --muted: #f4f4f5; --muted-foreground: #71717a; --accent: #f4f4f5;
+    --border: #e4e4e7; --input: #e4e4e7; --primary: #ff7700; --primary-hover: #ff9933; --primary-foreground: #131316;
+    --primary-soft: #fff4ea; --primary-ring: rgba(255,119,0,.35); --primary-deep: #c45a00; --ink: #131316;
+    --destructive: #e7000b; --sidebar: #fafafa; --radius: 8px;
+    --shadow-xs: 0 1px 2px 0 rgba(0,0,0,.05); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.06);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--background); color: var(--foreground); font: 14px/1.43 var(--font); -webkit-font-smoothing: antialiased; }
+  svg.i { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  svg.i.sm { width: 14px; height: 14px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: var(--radius); font: 500 13px/1 var(--font); white-space: nowrap; cursor: pointer; border: 1px solid transparent; color: var(--foreground); background: transparent; text-decoration: none; }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); }
+  .btn-primary { background: var(--primary); font-weight: 600; box-shadow: var(--shadow-xs); } .btn-primary:hover { background: var(--primary-hover); }
+  .btn-outline { background: #fff; border-color: var(--border); box-shadow: var(--shadow-xs); } .btn-outline:hover { background: var(--accent); }
+  .btn-ghost:hover { background: var(--accent); }
+  .btn-danger { background: var(--destructive); color: #fff; } .btn-danger:hover { background: #c50009; }
+  .btn-xs { height: 26px; padding: 0 8px; font-size: 12px; border-radius: 6px; }
+  .btn-icon { width: 32px; padding: 0; } .btn-icon.btn-xs { width: 26px; }
+  input { width: 100%; height: 36px; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius); background: #fff; color: var(--foreground); font: 14px/1.4 var(--font); box-shadow: var(--shadow-xs); }
+  input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; border: 1px solid var(--border); background: #fff; }
+  .badge-secondary { background: var(--muted); border-color: transparent; }
+  .badge-brand { background: var(--primary-soft); border-color: #ffd9b5; color: var(--primary-deep); }
+  .badge-mono { font-family: var(--mono); font-size: 11px; }
+  .muted { color: var(--muted-foreground); }
+  .grow { flex: 1; }
+
+  header { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid var(--border); }
+  .logo { width: 32px; height: 32px; border-radius: 8px; background: var(--primary); display: grid; place-items: center; color: var(--ink); }
+  header b { font-size: 15px; font-weight: 600; }
+  main { max-width: 1120px; margin: 0 auto; padding: 24px; }
+  .note { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted-foreground); margin-bottom: 14px; }
+  .tablewrap { border: 1px solid var(--border); border-radius: 12px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 820px; }
+  th { text-align: left; font-size: 12px; font-weight: 500; color: var(--muted-foreground); padding: 10px 14px; background: var(--sidebar); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover { background: #fcfcfc; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .ttl a { color: var(--foreground); font-weight: 600; text-decoration: none; } .ttl a:hover { color: var(--primary-deep); }
+  .ttl .slug { font: 11px var(--mono); color: var(--muted-foreground); }
+  .acts { display: flex; gap: 4px; justify-content: flex-end; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .empty { text-align: center; padding: 56px 20px; color: var(--muted-foreground); }
+  .codebox { position: relative; }
+  .codebox .btn { position: absolute; top: 8px; right: 8px; background: #2a2a2f; color: #fff; border-color: #3f3f46; }
+  .codebox .btn:hover { background: #3f3f46; }
+  .codebox pre { max-height: 260px; overflow: auto; padding-right: 150px; white-space: pre-wrap; }
+  .or { display: flex; align-items: center; gap: 10px; margin: 20px 0 12px; font-size: 12px; color: var(--muted-foreground); }
+  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  pre { background: var(--ink); color: #e4e4e7; font: 12px/1.6 var(--mono); padding: 12px 14px; border-radius: 8px; overflow-x: auto; white-space: pre; margin: 0; }
+
+  #shade { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 44; display: none; } #shade.on { display: block; }
+  #dialog { position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 45; width: 520px; max-width: calc(100vw - 32px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 24px; display: none; }
+  #dialog.on { display: block; }
+  #dialog h3 { margin: 0; font-size: 17px; font-weight: 600; }
+  #dialog p { margin: 8px 0 16px; color: var(--muted-foreground); }
+  #dialog .ft { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 13px; display: none; z-index: 50; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><svg class="i"><use href="#i-film"/></svg></div>
+  <b>AI Video Editor</b>
+  <span class="badge badge-secondary" id="count"></span>
+  <div class="grow"></div>
+  <button class="btn btn-primary" id="add"><svg class="i sm"><use href="#i-plus"/></svg>New project</button>
+</header>
+<main>
+  <div class="note"><svg class="i sm"><use href="#i-lock"/></svg>Projects are private to your Graphed team. Turn on a share link to let someone outside Graphed comment and cut one video.</div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Video</th><th>Sources</th><th>Length</th><th>Transcript</th><th>Comments</th><th>Cuts</th><th>Last activity</th><th>Share link</th><th></th></tr></thead>
+      <tbody id="rows"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</main>
+
+<div id="shade"></div>
+<div id="dialog"><h3 id="dtitle"></h3><p id="dtext"></p><div id="dbody"></div><div class="ft" id="dft"></div></div>
+<div id="toast"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4M8 4h8M9 13v2M15 13v2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+</svg>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 2600); };
+const api = async (p, o = {}) => { const r = await fetch(p, { ...o, headers: { "Content-Type": "application/json" } }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status); return r.json(); };
+const hms = (s) => { s = Math.round(s || 0); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? `${h}:${String(m).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}` : `${m}:${String(s % 60).padStart(2, "0")}`; };
+const ago = (d) => { if (!d) return "—"; const s = (Date.now() - new Date(d)) / 1000; return s < 60 ? "just now" : s < 3600 ? `${Math.floor(s / 60)}m ago` : s < 86400 ? `${Math.floor(s / 3600)}h ago` : `${Math.floor(s / 86400)}d ago`; };
+
+function dialog(title, text, bodyHtml, buttons) {
+  $("#dtitle").textContent = title; $("#dtext").textContent = text; $("#dbody").innerHTML = bodyHtml || "";
+  const ft = $("#dft"); ft.innerHTML = "";
+  for (const [label, cls, fn] of buttons) { const b = document.createElement("button"); b.className = "btn " + cls; b.textContent = label; b.onclick = fn; ft.appendChild(b); }
+  $("#shade").classList.add("on"); $("#dialog").classList.add("on");
+  const inp = $("#dbody input:not([readonly])"); if (inp) setTimeout(() => inp.focus(), 30);
+}
+const closeDialog = () => { $("#shade").classList.remove("on"); $("#dialog").classList.remove("on"); };
+$("#shade").onclick = closeDialog;
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDialog(); });
+
+let projects = [];
+async function load() {
+  projects = await api("/api/projects");
+  $("#count").textContent = projects.length;
+  if (!projects.length) { $("#rows").innerHTML = `<tr><td colspan="9" class="empty">No projects yet. Click <b>New project</b>.</td></tr>`; return; }
+  $("#rows").innerHTML = projects.map((p) => `<tr>
+    <td class="ttl"><a href="/p/${esc(p.slug)}/">${esc(p.title)}</a> <span class="badge badge-brand" style="margin-left:4px">${esc(p.version)}</span><div class="slug">${esc(p.slug)}</div></td>
+    <td class="num">${p.sources ? `${p.sources} file${p.sources > 1 ? "s" : ""}` : `<span class="muted">—</span>`}</td>
+    <td class="num">${p.has_edit ? hms(p.duration) : `<span class="muted">no edit yet</span>`}</td>
+    <td class="num muted">${p.words ? p.words.toLocaleString() + " words" : "none"}</td>
+    <td class="num">${p.comments}${p.open ? ` <span class="muted">· ${p.open} open</span>` : ""}</td>
+    <td class="num">${p.cuts}</td>
+    <td class="muted">${ago(p.active_at)}</td>
+    <td>${p.share
+      ? `<span class="dot" style="background:#34c759"></span> <button class="btn btn-ghost btn-xs" data-copy="${esc(p.slug)}"><svg class="i sm"><use href="#i-copy"/></svg>Copy link</button>`
+      : `<span class="dot" style="background:#d4d4d8"></span> <span class="muted" style="font-size:13px">Private</span>`}</td>
+    <td><div class="acts">
+      <button class="btn btn-outline btn-xs" data-share="${esc(p.slug)}"><svg class="i sm"><use href="#i-link"/></svg>Share</button>
+      <button class="btn btn-ghost btn-icon btn-xs" data-agent="${esc(p.slug)}" title="Copy prompt for a coding agent"><svg class="i sm"><use href="#i-bot"/></svg></button>
+      <button class="btn btn-ghost btn-icon btn-xs" data-rename="${esc(p.slug)}" title="Rename"><svg class="i sm"><use href="#i-pen"/></svg></button>
+      <button class="btn btn-ghost btn-icon btn-xs" data-del="${esc(p.slug)}" title="Delete"><svg class="i sm"><use href="#i-trash"/></svg></button>
+    </div></td></tr>`).join("");
+  document.querySelectorAll("[data-copy]").forEach((b) => b.onclick = () => copy(location.origin + get(b.dataset.copy).share));
+  document.querySelectorAll("[data-share]").forEach((b) => b.onclick = () => shareDialog(b.dataset.share));
+  document.querySelectorAll("[data-agent]").forEach((b) => b.onclick = () => agentDialog(`/api/projects/${encodeURIComponent(b.dataset.agent)}/agent-prompt`,
+    `Coding agent · ${get(b.dataset.agent).title}`, "Paste this into Claude Code (or any coding agent). It has this project's agent token, the MCP setup line, the source files and the @agent queue steps. Keep it private."));
+  document.querySelectorAll("[data-rename]").forEach((b) => b.onclick = () => renameDialog(b.dataset.rename));
+  document.querySelectorAll("[data-del]").forEach((b) => b.onclick = () => deleteDialog(b.dataset.del));
+}
+const get = (slug) => projects.find((p) => p.slug === slug);
+const copy = async (s, msg = "Link copied") => { try { await navigator.clipboard.writeText(s); toast(msg); } catch { prompt("Copy this", s); } };
+
+function shareDialog(slug) {
+  const p = get(slug), link = p.share ? location.origin + p.share : "";
+  const call = async (b) => { const r = await api(`/api/projects/${encodeURIComponent(slug)}/share`, { method: "POST", body: JSON.stringify(b) }); await load(); shareDialog(slug); if (r.share) copy(location.origin + r.share); };
+  dialog(p.share ? `Share link is on · ${p.title}` : `Share ${p.title}`,
+    p.share ? "Anyone with this link can watch, comment and cut the script for this one video. No Graphed login. New link stops the old one."
+            : "This video is private. A share link lets someone outside Graphed watch, comment and cut the script for this video only.",
+    p.share ? `<div style="display:flex;gap:6px"><input readonly value="${esc(link)}" onclick="this.select()"><button class="btn btn-outline" id="shc">Copy</button></div>` : "",
+    p.share ? [["Turn off", "btn-outline", () => call({ on: false })], ["New link", "btn-outline", () => call({ rotate: true })], ["Done", "btn-primary", closeDialog]]
+            : [["Cancel", "btn-outline", closeDialog], ["Turn on link", "btn-primary", () => call({ on: true })]]);
+  const c = $("#shc"); if (c) c.onclick = () => copy(link);
+}
+function renameDialog(slug) {
+  const p = get(slug);
+  dialog("Rename video", "The slug in the URL stays the same.", `<input id="nm" value="${esc(p.title)}">`, [
+    ["Cancel", "btn-outline", closeDialog],
+    ["Save", "btn-primary", async () => { const t = $("#nm").value.trim(); if (!t) return; await api(`/api/projects/${encodeURIComponent(slug)}`, { method: "PATCH", body: JSON.stringify({ title: t }) }); closeDialog(); load(); }]]);
+  $("#nm").onkeydown = (e) => { if (e.key === "Enter") $("#dft .btn-primary").click(); };
+}
+function deleteDialog(slug) {
+  const p = get(slug);
+  dialog(`Delete ${p.title}?`, `This removes its ${p.comments} comments, ${p.cuts} script cuts, share link and uploaded video files. You cannot undo it. Type the slug to confirm.`,
+    `<input id="cf" placeholder="${esc(slug)}">`, [
+    ["Cancel", "btn-outline", closeDialog],
+    ["Delete", "btn-danger", async () => { if ($("#cf").value.trim() !== slug) return toast("Type the slug to confirm"); closeDialog(); await api(`/api/projects/${encodeURIComponent(slug)}`, { method: "DELETE" }); toast("Deleted"); load(); }]]);
+}
+// prompt box with a copy button; the text comes from the server so it always has the right paths
+const codeBox = (text) => `<div class="codebox"><pre id="agentText">${esc(text)}</pre><button class="btn btn-xs" id="agentCopy"><svg class="i sm"><use href="#i-copy"/></svg>Copy for agent</button></div>`;
+const wireCopy = () => { const b = $("#agentCopy"); if (b) b.onclick = () => copy($("#agentText").textContent, "Prompt copied. Paste it into your coding agent."); };
+async function agentDialog(url, title, text) {
+  const prompt = await (await fetch(url)).text();
+  dialog(title, text, codeBox(prompt), [["Done", "btn-primary", closeDialog]]); wireCopy();
+}
+$("#add").onclick = async () => {
+  const prompt = await (await fetch("/api/agent-prompt")).text().catch(() => "");
+  dialog("New project", "Name it, then upload the source files on the next page: camera angles, screen recordings, audio. Add as many as you need.",
+    `<input id="ptitle" placeholder="e.g. Podcast with Alex, ep 12">
+     <div class="or">or have a coding agent add a finished video</div>${codeBox(prompt)}`,
+    [["Cancel", "btn-outline", closeDialog], ["Create and upload sources", "btn-primary", createProject]]);
+  wireCopy();
+  $("#ptitle").onkeydown = (e) => { if (e.key === "Enter") createProject(); };
+};
+async function createProject() {
+  const title = $("#ptitle").value.trim(); if (!title) return $("#ptitle").focus();
+  const { slug } = await api("/api/projects", { method: "POST", body: JSON.stringify({ title }) });
+  location.href = `/p/${slug}/`;
+}
+
+load().catch((e) => { $("#rows").innerHTML = `<tr><td colspan="9" class="empty">Load failed: ${esc(e.message)}</td></tr>`; });
+</script>
+</body>
+</html>

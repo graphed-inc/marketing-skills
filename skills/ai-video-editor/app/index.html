@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex">
+<title>Review</title>
+<!--BOOT-->
+<style>
+  /* clay-tables look: shadcn/ui tokens (new-york, light only), orange #ff7700, ink #131316 */
+  :root {
+    color-scheme: light;
+    --background: #fff; --foreground: #131316; --muted: #f4f4f5; --muted-foreground: #71717a; --accent: #f4f4f5;
+    --border: #e4e4e7; --input: #e4e4e7; --primary: #ff7700; --primary-hover: #ff9933; --primary-foreground: #131316;
+    --primary-soft: #fff4ea; --primary-ring: rgba(255,119,0,.35); --primary-deep: #c45a00; --ink: #131316;
+    --destructive: #e7000b; --sidebar: #fafafa; --radius: 8px;
+    --shadow-xs: 0 1px 2px 0 rgba(0,0,0,.05); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.06);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--background); color: var(--foreground); font: 14px/1.43 var(--font); -webkit-font-smoothing: antialiased; }
+  svg.i { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  svg.i.sm { width: 14px; height: 14px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: var(--radius); font: 500 14px/1 var(--font); white-space: nowrap; cursor: pointer; border: 1px solid transparent; color: var(--foreground); background: transparent; transition: background .15s, box-shadow .15s; text-decoration: none; }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); }
+  .btn:disabled { opacity: .5; pointer-events: none; }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); font-weight: 600; box-shadow: var(--shadow-xs); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-outline { background: #fff; border-color: var(--border); box-shadow: var(--shadow-xs); }
+  .btn-outline:hover { background: var(--accent); }
+  .btn-ghost:hover { background: var(--accent); }
+  .btn-dark { background: var(--ink); color: #fff; } .btn-dark:hover { background: #2a2a2f; }
+  .btn-sm { height: 32px; padding: 0 12px; font-size: 13px; gap: 6px; }
+  .btn-xs { height: 26px; padding: 0 8px; font-size: 12px; gap: 4px; border-radius: 6px; }
+  .btn-icon { width: 36px; padding: 0; } .btn-icon.btn-sm { width: 32px; } .btn-icon.btn-xs { width: 26px; }
+  .btn.on { background: var(--primary-soft); color: var(--primary-deep); border-color: #ffd9b5; }
+  .btn-block { width: 100%; }
+  input:not([type=checkbox]), select, textarea { width: 100%; height: 36px; padding: 0 12px; border: 1px solid var(--input); border-radius: var(--radius); background: #fff; color: var(--foreground); font: 14px/1.4 var(--font); box-shadow: var(--shadow-xs); }
+  textarea { height: auto; min-height: 64px; padding: 8px 12px; resize: none; }
+  select { height: 32px; font-size: 13px; padding: 0 8px; width: auto; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+  input[type=checkbox] { appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid #d4d4d8; border-radius: 4px; background: #fff; cursor: pointer; display: inline-grid; place-content: center; flex: none; }
+  input[type=checkbox]:checked { background: var(--primary); border-color: var(--primary); }
+  input[type=checkbox]:checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(-45deg) translate(1px,-1px); }
+  .badge { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; border: 1px solid var(--border); background: #fff; }
+  .badge-secondary { background: var(--muted); border-color: transparent; }
+  .badge-brand { background: var(--primary-soft); border-color: #ffd9b5; color: var(--primary-deep); }
+  .badge-mono { font-family: var(--mono); font-size: 11px; }
+  .muted { color: var(--muted-foreground); }
+  .grow { flex: 1; }
+  .sep { width: 1px; height: 16px; background: var(--border); }
+
+  #app { display: grid; grid-template-columns: 232px minmax(440px, 1fr) minmax(520px, 42vw); height: 100vh; }
+
+  /* sidebar */
+  aside { background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; }
+  .sb-head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 10px; }
+  .logo { width: 32px; height: 32px; border-radius: 8px; background: var(--primary); display: grid; place-items: center; color: var(--ink); }
+  .sb-head b { display: block; font-size: 14px; font-weight: 600; line-height: 1.2; }
+  .sb-head span { font-size: 12px; color: var(--muted-foreground); }
+  .sb-group { padding: 8px; overflow: auto; flex: 1; }
+  .sb-label { font-size: 12px; font-weight: 500; color: var(--muted-foreground); padding: 0 8px; height: 32px; display: flex; align-items: center; }
+  .tbl { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: 6px; cursor: pointer; font-size: 14px; color: #3f3f46; }
+  .tbl:hover { background: var(--accent); color: var(--foreground); }
+  .tbl.on { background: var(--accent); color: var(--foreground); font-weight: 500; }
+  .tbl .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tbl .ct { font-size: 12px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .tbl svg { color: var(--muted-foreground); } .tbl.on svg { color: var(--primary); }
+  .tbl.chap .ct { width: 38px; font-family: var(--mono); font-size: 11px; }
+  .tbl.chap.now { color: var(--primary-deep); }
+  .sb-foot { padding: 12px; border-top: 1px solid var(--border); display: grid; gap: 8px; }
+  .sb-foot .fine { font-size: 12px; color: var(--muted-foreground); text-align: center; }
+  .sb-foot .fine a { color: var(--foreground); cursor: pointer; text-decoration: underline; text-decoration-color: #d4d4d8; text-underline-offset: 3px; }
+
+  /* script (Descript-style) */
+  #script { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .topbar { height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid var(--border); flex: none; }
+  .crumb { color: var(--muted-foreground); }
+  .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .toolbar { height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--border); flex: none; }
+  .toolbar label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #3f3f46; cursor: pointer; white-space: nowrap; }
+  .toolbar .find { width: 200px; } .toolbar .find input { height: 30px; font-size: 13px; }
+  #dlprog { display: none; align-items: center; gap: 8px; font-size: 12px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  #dlprog .track { width: 120px; height: 6px; background: var(--muted); border-radius: 99px; overflow: hidden; }
+  #dlprog .fill { height: 100%; width: 0; background: var(--primary); }
+  #docwrap { flex: 1; overflow: auto; position: relative; }
+  #doc { max-width: 760px; margin: 0 auto; padding: 28px 40px 160px; font-size: 17px; line-height: 1.8; user-select: none; -webkit-user-select: none; }
+  .para { margin: 0 0 22px; }
+  .spk { display: flex; align-items: center; gap: 8px; font: 600 12px/1 var(--font); letter-spacing: .02em; color: #3f3f46; margin-bottom: 4px; }
+  .spk .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .spk .tcode { font: 11px var(--mono); color: var(--muted-foreground); cursor: pointer; font-weight: 400; }
+  .spk .tcode:hover { color: var(--primary-deep); }
+  .w { border-radius: 3px; cursor: text; padding: 1px 0; }
+  .w:hover { background: #f1f1f3; }
+  .w.bc { color: #8b8b94; font-style: italic; font-size: 15px; }
+  .w.cur { background: var(--primary-soft); box-shadow: inset 0 -2px 0 var(--primary); }
+  .w.sel { background: #ffd9b5 !important; box-shadow: none; }
+  .w.cut { color: #b4b4bc; text-decoration: line-through; text-decoration-color: #e7000b; text-decoration-thickness: 1.5px; }
+  #doc.hidecuts .w.cut { display: none; }
+  .w.hit { background: #fff3a8; }
+  .w.cmt { text-decoration: underline dotted var(--primary); text-underline-offset: 5px; }
+  .insert { display: flex; align-items: center; gap: 10px; margin: 0 0 22px; padding: 12px 14px; border: 1px dashed #ffd9b5; background: var(--primary-soft); border-radius: 10px; font-size: 14px; color: var(--primary-deep); cursor: pointer; }
+  #selbar { position: absolute; z-index: 10; display: none; align-items: center; gap: 4px; padding: 4px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-lg); }
+  #selbar .n { font-size: 12px; color: var(--muted-foreground); padding: 0 6px; white-space: nowrap; }
+
+  /* right: player + comments (Frame.io-style) */
+  #right { border-left: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; }
+  #stage { flex: none; aspect-ratio: 16 / 9; background: #0b0b0c; position: relative; }
+  #stage video { width: 100%; height: 100%; object-fit: contain; display: block; }
+  #ink { position: absolute; pointer-events: none; }
+  #ink.drawing { pointer-events: auto; cursor: crosshair; }
+  #drawhint { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.7); color: #fff; font-size: 12px; padding: 5px 10px; border-radius: 6px; display: none; }
+  #skipnote { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,.72); color: #fff; font-size: 12px; padding: 5px 10px; border-radius: 6px; display: none; }
+  #bigplay { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; cursor: pointer; box-shadow: var(--shadow-lg); }
+  #bigplay svg { width: 24px; height: 24px; fill: var(--ink); stroke: none; margin-left: 4px; }
+  .controls { flex: none; border-bottom: 1px solid var(--border); padding: 8px 14px 10px; }
+  #tl { position: relative; height: 26px; cursor: pointer; margin-bottom: 4px; }
+  #tl .rail { position: absolute; left: 0; right: 0; top: 15px; height: 6px; background: var(--muted); border-radius: 99px; overflow: hidden; }
+  #tl .buf { position: absolute; left: 0; top: 0; bottom: 0; background: #e4e4e7; }
+  #tl .play { position: absolute; left: 0; top: 0; bottom: 0; background: var(--primary); }
+  #tl .cutz { position: absolute; top: 15px; height: 6px; background: repeating-linear-gradient(45deg, #e7000b 0 2px, #fecaca 2px 4px); }
+  #tl .head { position: absolute; top: 11px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); box-shadow: var(--shadow-xs); pointer-events: none; }
+  #tl .mk { position: absolute; top: 0; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--primary); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--primary-deep); cursor: pointer; z-index: 2; }
+  #tl .mk.res { background: #a1a1aa; box-shadow: 0 0 0 1px #71717a; }
+  #tl .mk.sel { transform: scale(1.35); }
+  #tl .rg { position: absolute; top: 4px; height: 4px; background: var(--primary); opacity: .45; border-radius: 99px; }
+  #tl .chap { position: absolute; top: 15px; width: 2px; height: 6px; background: #fff; }
+  #tip { position: absolute; top: -20px; transform: translateX(-50%); font: 11px var(--mono); background: var(--ink); color: #fff; padding: 2px 6px; border-radius: 4px; display: none; pointer-events: none; white-space: nowrap; }
+  .row { display: flex; align-items: center; gap: 4px; }
+  #time { font: 12.5px var(--mono); font-variant-numeric: tabular-nums; margin: 0 6px; white-space: nowrap; }
+  #chapname { font-size: 12.5px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ph { height: 46px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: 1px solid var(--border); flex: none; }
+  .ph b { font-weight: 600; }
+  .ph input { height: 30px; font-size: 13px; width: 170px; }
+  #list { flex: 1; overflow: auto; padding: 6px 8px; min-height: 80px; }
+  .cm { border: 1px solid transparent; border-radius: 10px; padding: 9px 10px 7px; cursor: pointer; }
+  .cm:hover { background: #fafafa; }
+  .cm.sel { border-color: #ffd9b5; background: var(--primary-soft); }
+  .cm.res .txt { color: var(--muted-foreground); text-decoration: line-through; text-decoration-color: #d4d4d8; }
+  .cm .top { display: flex; align-items: center; gap: 8px; }
+  .av { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; color: #fff; flex: none; }
+  .cm .who { font-weight: 600; font-size: 13px; }
+  .cm .ago { font-size: 12px; color: var(--muted-foreground); }
+  .cm .quote { margin: 6px 0 0 30px; padding-left: 8px; border-left: 2px solid #ffd9b5; color: var(--muted-foreground); font-size: 13px; font-style: italic; }
+  .cm .txt { margin: 5px 0 5px 30px; white-space: pre-wrap; word-wrap: break-word; }
+  .cm .acts { margin-left: 30px; display: flex; align-items: center; gap: 4px; }
+  .cm .acts label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted-foreground); margin-right: 6px; cursor: pointer; }
+  .reply { margin: 6px 0 0 30px; padding: 7px 10px; background: var(--muted); border-radius: 8px; font-size: 13px; }
+  .reply b { font-size: 12px; }
+  .rbox { margin: 6px 0 0 30px; display: flex; gap: 6px; }
+  .rbox input { height: 30px; font-size: 13px; }
+  .empty { text-align: center; padding: 28px 20px; color: var(--muted-foreground); }
+  .empty .ico { width: 40px; height: 40px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; margin: 0 auto 10px; }
+  #composer { border-top: 1px solid var(--border); padding: 10px 14px 12px; flex: none; background: #fff; }
+  #composer .meta { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .tools { display: flex; align-items: center; gap: 4px; }
+  .sw { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border); cursor: pointer; }
+  .sw.on { box-shadow: 0 0 0 2px var(--foreground); }
+  #composer .send { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .kbd { font: 11px var(--mono); color: var(--muted-foreground); }
+
+  /* sources */
+  .sb-label .btn { margin-left: auto; }
+  .src { display: block; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #3f3f46; }
+  .src:hover { background: var(--accent); }
+  .src .row1 { display: flex; align-items: center; gap: 8px; }
+  .src .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .src .ct { font-size: 11px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .src .bar { height: 4px; background: var(--muted); border-radius: 99px; overflow: hidden; margin: 5px 0 1px 24px; }
+  .src .bar i { display: block; height: 100%; background: var(--primary); width: 0; }
+  .src.bad .ct { color: var(--destructive); }
+  .srcempty { font-size: 12px; color: var(--muted-foreground); padding: 2px 8px 6px; }
+  #noedit { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #d4d4d8; text-align: center; padding: 20px; }
+  #noedit b { color: #fff; font-size: 15px; }
+  #noedit .btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  #fcState { max-width: 440px; font-size: 13px; line-height: 1.45; background: rgba(255,255,255,.08); border-radius: 8px; padding: 8px 12px; }
+  #fcState a { color: #fdba74; }
+  .fl { font-size: 12px; font-weight: 500; margin: 12px 0 5px; color: var(--foreground); }
+  .fl:first-child { margin-top: 0; }
+  #drop { position: fixed; inset: 0; z-index: 60; background: rgba(255,119,0,.12); border: 3px dashed var(--primary); display: none; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: var(--primary-deep); pointer-events: none; }
+  #dialog.wide { width: 760px; }
+  .codebox { position: relative; }
+  .codebox pre { background: var(--ink); color: #e4e4e7; font: 12px/1.6 var(--mono); padding: 12px 150px 12px 14px; border-radius: 8px; margin: 0; max-height: 50vh; overflow: auto; white-space: pre-wrap; }
+  .codebox .btn { position: absolute; top: 8px; right: 8px; background: #2a2a2f; color: #fff; border-color: #3f3f46; }
+  .abadge { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border-radius: 99px; font-size: 11px; font-weight: 600; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .abadge.working { background: #fff4ea; color: var(--primary-deep); border-color: #ffd9b5; }
+  .abadge.done { background: #ecfdf3; color: #067647; border-color: #abefc6; }
+  .abadge.failed { background: #fef3f2; color: #b42318; border-color: #fecdca; }
+  .at { color: #3730a3; font-weight: 600; }
+  .txbox { margin-top: 12px; max-height: 26vh; overflow: auto; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; line-height: 1.55; background: var(--sidebar); white-space: pre-wrap; }
+  #shade { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 44; display: none; }
+  #shade.on { display: block; }
+  #dialog { position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 45; width: 420px; max-width: calc(100vw - 32px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 24px; display: none; }
+  #dialog.on { display: block; }
+  #dialog h3 { margin: 0; font-size: 17px; font-weight: 600; }
+  #dialog p { margin: 8px 0 16px; color: var(--muted-foreground); }
+  #dialog .ft { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 13px; display: none; z-index: 50; }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside>
+    <div class="sb-head">
+      <div class="logo"><svg class="i"><use href="#i-film"/></svg></div>
+      <div style="min-width:0"><b>AI Video Editor</b><span id="sbsub" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">—</span></div>
+    </div>
+    <div class="sb-group">
+      <a class="tbl" id="allproj" href="/" style="display:none;text-decoration:none"><svg class="i"><use href="#i-left"/></svg><span class="nm">All projects</span></a>
+      <div id="srcwrap" style="display:none">
+        <div class="sb-label">Sources<button class="btn btn-ghost btn-icon btn-xs" id="srcAdd" title="Upload source files (or drop them on the page)"><svg class="i sm"><use href="#i-upload"/></svg></button></div>
+        <div id="srclist"></div>
+        <input type="file" id="srcFile" multiple hidden>
+      </div>
+      <div class="sb-label" style="margin-top:8px">Comments</div>
+      <div class="tbl on" data-f="all"><svg class="i"><use href="#i-msg"/></svg><span class="nm">All</span><span class="ct" id="c-all">0</span></div>
+      <div class="tbl" data-f="open"><svg class="i"><use href="#i-circle"/></svg><span class="nm">Open</span><span class="ct" id="c-open">0</span></div>
+      <div class="tbl" data-f="res"><svg class="i"><use href="#i-check"/></svg><span class="nm">Resolved</span><span class="ct" id="c-res">0</span></div>
+      <div class="tbl" id="cutsnav"><svg class="i"><use href="#i-scissors"/></svg><span class="nm">Script cuts</span><span class="ct" id="c-cuts">0</span></div>
+      <div class="sb-label" style="margin-top:8px" id="chaplabel">Chapters</div>
+      <div id="chapters"></div>
+    </div>
+    <div class="sb-foot">
+      <a class="btn btn-outline btn-sm btn-block" id="exmd"><svg class="i sm"><use href="#i-file"/></svg>Export edit list (.md)</a>
+      <a class="btn btn-ghost btn-sm btn-block" id="excsv"><svg class="i sm"><use href="#i-table"/></svg>Export comments CSV</a>
+      <div class="fine">Editing as <b id="me">—</b> · <a id="rename">change</a></div>
+    </div>
+  </aside>
+
+  <main id="script">
+    <div class="topbar">
+      <span class="crumb" id="crumb">AI Video Editor /</span>
+      <span class="title" id="atitle">—</span>
+      <span class="badge badge-brand" id="aver">v1</span>
+      <span class="badge badge-secondary badge-mono" id="adur"></span>
+      <div class="grow"></div>
+      <div id="dlprog"><div class="track"><div class="fill" id="dlfill"></div></div><span id="dltxt"></span></div>
+      <button class="btn btn-outline btn-sm" id="agent" style="display:none" title="Copy a prompt for Claude Code or another coding agent"><svg class="i sm"><use href="#i-bot"/></svg>Copy for agent</button>
+      <button class="btn btn-outline btn-sm" id="share" style="display:none"><svg class="i sm"><use href="#i-link"/></svg>Share</button>
+      <button class="btn btn-primary btn-sm" id="dl"><svg class="i sm"><use href="#i-dl"/></svg>Download MP4</button>
+    </div>
+    <div class="toolbar">
+      <b style="font-size:13px">Script</b>
+      <span class="badge badge-secondary" id="wcount"></span>
+      <div class="sep"></div>
+      <label title="Playback jumps over deleted words"><input type="checkbox" id="skip" checked>Skip deleted words</label>
+      <label title="Show deleted words struck through"><input type="checkbox" id="showcut" checked>Show deleted</label>
+      <label title="Keep the current word in view while playing"><input type="checkbox" id="follow" checked>Follow</label>
+      <div class="grow"></div>
+      <button class="btn btn-ghost btn-icon btn-xs" id="undoCut" title="Undo last script edit (⌘Z)"><svg class="i sm"><use href="#i-undo"/></svg></button>
+      <div class="find"><input id="findq" placeholder="Find in script"></div>
+    </div>
+    <div id="docwrap">
+      <div id="doc"><div class="empty">Loading transcript…</div></div>
+      <div id="selbar">
+        <span class="n" id="selinfo"></span>
+        <button class="btn btn-dark btn-xs" id="sDel"><svg class="i sm"><use href="#i-scissors"/></svg>Delete<span class="kbd" style="color:#a1a1aa">⌫</span></button>
+        <button class="btn btn-outline btn-xs" id="sRestore"><svg class="i sm"><use href="#i-undo"/></svg>Restore</button>
+        <button class="btn btn-outline btn-xs" id="sCmt"><svg class="i sm"><use href="#i-msg"/></svg>Comment</button>
+        <button class="btn btn-ghost btn-icon btn-xs" id="sPlay" title="Play selection"><svg class="i sm"><use href="#i-play"/></svg></button>
+      </div>
+    </div>
+  </main>
+
+  <section id="right">
+    <div id="stage">
+      <video id="v" playsinline preload="metadata"></video>
+      <canvas id="ink"></canvas>
+      <div id="noedit"><b>No edit yet</b><span id="noeditTxt">Upload the source files: camera angles, screen recording, audio.<br>Then ask the agent for a first cut: it reads every transcript, picks the takes and posts v1.</span>
+        <div id="fcState" style="display:none"></div>
+        <div class="btns"><button class="btn btn-outline btn-sm" id="neUp"><svg class="i sm"><use href="#i-upload"/></svg>Upload source files</button>
+        <button class="btn btn-primary btn-sm" id="neCut"><svg class="i sm"><use href="#i-scissors"/></svg><span>Ask the agent for a first cut</span></button>
+        <button class="btn btn-outline btn-sm" id="neAgent"><svg class="i sm"><use href="#i-bot"/></svg>Copy for agent</button></div></div>
+      <div id="bigplay"><svg><path d="M6 4l14 8-14 8z"/></svg></div>
+      <div id="drawhint">Draw on the frame · Esc to stop</div>
+      <div id="skipnote">Skipped deleted words</div>
+      <div id="pmsg" style="position:absolute;top:10px;right:10px;max-width:70%;background:rgba(0,0,0,.75);color:#fff;font-size:12px;padding:6px 10px;border-radius:6px;display:none"></div>
+    </div>
+    <div class="controls">
+      <div id="tl"><div class="rail"><div class="buf" id="buf"></div><div class="play" id="pl"></div></div><div class="head" id="hd"></div><div id="tip"></div></div>
+      <div class="row">
+        <button class="btn btn-ghost btn-icon btn-sm" id="pp" title="Play / pause (space)"><svg class="i"><use href="#i-play"/></svg></button>
+        <button class="btn btn-ghost btn-icon btn-sm" id="fb" title="Back 1 frame (←)"><svg class="i"><use href="#i-left"/></svg></button>
+        <button class="btn btn-ghost btn-icon btn-sm" id="ff" title="Forward 1 frame (→)"><svg class="i"><use href="#i-right"/></svg></button>
+        <span id="time">0:00:00 / 0:00:00</span>
+        <span id="chapname"></span>
+        <div class="grow"></div>
+        <select id="rate" title="Speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+        <button class="btn btn-ghost btn-icon btn-sm" id="mute" title="Mute"><svg class="i"><use href="#i-vol"/></svg></button>
+        <button class="btn btn-ghost btn-icon btn-sm" id="fs" title="Full screen"><svg class="i"><use href="#i-max"/></svg></button>
+      </div>
+    </div>
+    <div class="ph"><b>Comments</b><span class="badge badge-secondary" id="ccount">0</span><div class="grow"></div><input id="q" placeholder="Search comments"></div>
+    <div id="list"></div>
+    <div id="composer">
+      <div class="meta">
+        <span class="badge badge-brand badge-mono" id="cin">0:00:00</span>
+        <button class="btn btn-ghost btn-xs" id="range" title="Mark the current time as in / out point"><svg class="i sm"><use href="#i-range"/></svg><span>Add range</span></button>
+        <div class="grow"></div>
+        <div class="tools">
+          <button class="btn btn-ghost btn-icon btn-xs" data-tool="pen" title="Pen"><svg class="i sm"><use href="#i-pen"/></svg></button>
+          <button class="btn btn-ghost btn-icon btn-xs" data-tool="arrow" title="Arrow"><svg class="i sm"><use href="#i-arrow"/></svg></button>
+          <button class="btn btn-ghost btn-icon btn-xs" data-tool="rect" title="Box"><svg class="i sm"><use href="#i-square"/></svg></button>
+          <span class="sw on" data-c="#ff3b30" style="background:#ff3b30"></span>
+          <span class="sw" data-c="#ff7700" style="background:#ff7700"></span>
+          <span class="sw" data-c="#ffd60a" style="background:#ffd60a"></span>
+          <span class="sw" data-c="#34c759" style="background:#34c759"></span>
+          <span class="sw" data-c="#0a84ff" style="background:#0a84ff"></span>
+          <button class="btn btn-ghost btn-icon btn-xs" id="undo" title="Undo stroke"><svg class="i sm"><use href="#i-undo"/></svg></button>
+        </div>
+      </div>
+      <div id="quote" class="muted" style="display:none;font-size:12.5px;font-style:italic;margin-bottom:6px"></div>
+      <textarea id="body" placeholder="Leave a note at this frame… (C) · start with @agent to ask the AI editor to make the change"></textarea>
+      <div class="send"><span class="kbd">⌘↵ to post · typing pauses the video</span>
+        <button class="btn btn-primary btn-sm" id="post">Post</button></div>
+    </div>
+  </section>
+</div>
+
+<div id="shade"></div>
+<div id="dialog"><h3 id="dtitle"></h3><p id="dtext"></p><div id="dbody"></div><div class="ft" id="dft"></div></div>
+<div id="toast"></div>
+<div id="drop">Drop files to add them as sources</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4v16M17 4v16"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM22 9l-6 6M16 9l6 6"/></symbol>
+  <symbol id="i-max" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+  <symbol id="i-range" viewBox="0 0 24 24"><path d="M4 4v16M20 4v16M4 12h16"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="i-square" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4M8 4h8M9 13v2M15 13v2"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 24 24"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></symbol>
+</svg>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script>
+const $ = (s) => document.querySelector(s);
+const FPS = 30;
+// BOOT comes from the server: base = /p/<slug> (owner, behind Graphed login) or /public/<token> (share link)
+const BOOT = window.BOOT || { base: "", shared: true };
+const BASE = BOOT.base;
+let CHAPTERS = [], INSERTS = [];
+// Chapters and inserts can come from a version an agent published (meta.json): times become numbers, names
+// become text, and every name is escaped where the page draws it.
+function cleanMarks(asset) {
+  const list = (v) => (Array.isArray(v) ? v : []);
+  return { chapters: list(asset.chapters).filter(Array.isArray).map(([t, n]) => [Number(t) || 0, String(n ?? "")]),
+    inserts: list(asset.inserts).filter((x) => x && typeof x === "object").map((x) => ({ ...x, t0: Number(x.t0) || 0, label: String(x.label ?? "") })) };
+}
+
+const v = $("#v");
+let asset = null, comments = [], cuts = [], filter = "all", sel = null, me = localStorage.getItem("review-name") || "";
+let W = [], SPK = [], wEls = [], T0 = [], cutMask = null, skipRanges = [], undoStack = [];
+const tc = (s) => { s = Math.max(0, s); const f = Math.floor((s % 1) * FPS), t = Math.floor(s);
+  return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}:${String(f).padStart(2, "0")}`; };
+const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 2600); };
+const api = async (p, o = {}) => { const r = await fetch(BASE + p, { ...o, headers: { "Content-Type": "application/json" } }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status); return r.json(); };
+const color = (n) => { let h = 0; for (const c of n) h = (h * 31 + c.charCodeAt(0)) % 360; return `hsl(${h} 55% 48%)`; };
+const ago = (d) => { const s = (Date.now() - new Date(d)) / 1000; return s < 60 ? "just now" : s < 3600 ? `${Math.floor(s / 60)}m` : s < 86400 ? `${Math.floor(s / 3600)}h` : `${Math.floor(s / 86400)}d`; };
+const typing = () => document.activeElement?.matches("input,textarea,select");
+
+// ---------- dialog ----------
+function dialog(title, text, bodyHtml, buttons, wide) {
+  $("#dialog").classList.toggle("wide", !!wide);
+  $("#dtitle").textContent = title; $("#dtext").textContent = text; $("#dbody").innerHTML = bodyHtml || "";
+  const ft = $("#dft"); ft.innerHTML = "";
+  for (const [label, cls, fn] of buttons) { const b = document.createElement("button"); b.className = "btn btn-sm " + cls; b.textContent = label; b.onclick = fn; ft.appendChild(b); }
+  $("#shade").classList.add("on"); $("#dialog").classList.add("on");
+  const inp = $("#dbody input"); if (inp) setTimeout(() => inp.focus(), 30);
+}
+const closeDialog = () => { $("#shade").classList.remove("on"); $("#dialog").classList.remove("on"); $("#dbody video")?.pause(); $("#dbody").innerHTML = ""; };
+function askName(then) {
+  dialog("Your name", "Shown next to your comments and script edits.", `<input id="nm" placeholder="e.g. Alex" value="${esc(me)}">`, [
+    ["Save", "btn-primary", () => { const n = $("#nm").value.trim(); if (!n) return; me = n; localStorage.setItem("review-name", n); $("#me").textContent = n; closeDialog(); then && then(); }]]);
+  $("#nm").onkeydown = (e) => { if (e.key === "Enter") $("#dft button").click(); };
+}
+$("#rename").onclick = () => askName();
+const needName = (fn) => me ? fn() : askName(fn);
+
+function playerMsg(m) { const n = $("#pmsg"); n.textContent = m; n.style.display = m ? "block" : "none"; }
+
+// ---------- load ----------
+async function load() {
+  asset = await api("/api/project");
+  ({ chapters: CHAPTERS, inserts: INSERTS } = cleanMarks(asset));
+  $("#atitle").textContent = asset.title; $("#aver").textContent = asset.version;
+  if (asset.versions?.length) $("#aver").title = asset.versions.map((v) => `${v.version}${v.by ? " · " + v.by : ""}: ${v.changes || "no notes"}`).join("\n"); $("#adur").textContent = tc(asset.duration || 0);
+  $("#sbsub").textContent = asset.title; $("#sbsub").title = asset.title;
+  if (!BOOT.shared) { $("#allproj").style.display = ""; $("#share").style.display = ""; $("#crumb").innerHTML = `<a href="/" style="color:inherit;text-decoration:none">Projects</a> /`; }
+  $("#chaplabel").style.display = CHAPTERS.length ? "" : "none";
+  if (!BOOT.shared) { $("#srcwrap").style.display = ""; $("#agent").style.display = ""; refreshSources(); watchRender(asset.render); }
+  if (!asset.has_edit) {
+    $("#noedit").style.display = "flex"; $("#bigplay").style.display = "none"; $("#dl").style.display = "none"; $("#adur").style.display = "none";
+    $("#aver").textContent = "sources";
+    if (BOOT.shared) { $("#noeditTxt").textContent = "The edit is not up yet. Check back soon."; $("#noedit .btns").style.display = "none"; }
+    $("#doc").innerHTML = `<div class="empty"><div class="ico"><svg class="i"><use href="#i-film"/></svg></div><b>No review video yet</b><div style="margin-top:4px">${BOOT.shared ? "" : "Upload the source files on the left, then click <b>Ask the agent for a first cut</b>. An agent working the queue (<b>Copy for agent</b> → Claude Code) makes v1."}</div></div>`;
+    if (!BOOT.shared) { refreshFirstCut(); setInterval(() => { if (!document.hidden) refreshFirstCut(); }, 15000); }
+    await refresh(); if (!me) askName(); else $("#me").textContent = me;
+    return;
+  }
+  const src = `${BASE}/hls/index.m3u8`;
+  // hls.js first (Chrome / Edge / Firefox); the native player only where hls.js can't run (iOS Safari)
+  if (window.Hls && Hls.isSupported()) {
+    const h = new Hls({ maxBufferLength: 30, fragLoadingMaxRetry: 6, manifestLoadingMaxRetry: 4 });
+    h.on(Hls.Events.ERROR, (_, d) => {
+      console.warn("hls", d.type, d.details, d.fatal);
+      if (!d.fatal) return;
+      if (d.type === Hls.ErrorTypes.NETWORK_ERROR) { playerMsg("Network problem loading the video, retrying…"); h.startLoad(); }
+      else if (d.type === Hls.ErrorTypes.MEDIA_ERROR) { playerMsg("Recovering playback…"); h.recoverMediaError(); }
+      else playerMsg("Playback error: " + d.details + ". Reload the page.");
+    });
+    h.on(Hls.Events.FRAG_LOADED, () => playerMsg(""));
+    h.loadSource(src); h.attachMedia(v);
+  } else if (v.canPlayType("application/vnd.apple.mpegurl")) v.src = src;
+  else playerMsg("This browser can't play the stream. Use Chrome, Edge or Safari.");
+  v.addEventListener("error", () => playerMsg("Video error: " + (v.error?.message || v.error?.code || "unknown")));
+  $("#chapters").innerHTML = CHAPTERS.map(([t, n], i) => `<div class="tbl chap" data-t="${t}" data-i="${i}"><span class="ct">${mmss(t)}</span><span class="nm">${esc(n)}</span></div>`).join("");
+  document.querySelectorAll("#chapters .tbl").forEach((el) => el.onclick = () => { seek(+el.dataset.t); scrollToTime(+el.dataset.t, true); });
+  const tr = await api("/api/transcript");
+  W = tr.words || []; SPK = tr.speakers || []; T0 = W.map((w) => w[0]);
+  buildDoc();
+  if (!W.length) $("#doc").innerHTML = `<div class="empty"><div class="ico"><svg class="i"><use href="#i-file"/></svg></div><b>No transcript for this video</b><div style="margin-top:4px">Comments, ranges and drawings still work. Add one with <code>add-video.mjs --transcript</code>.</div></div>`;
+  await Promise.all([refresh(), refreshCuts()]);
+  if (!me) askName(); else $("#me").textContent = me;
+}
+
+// ---------- script document ----------
+function buildDoc() {
+  const html = []; let open = false, ins = 0;
+  const runLen = (i) => { let n = 0; while (i + n < W.length && W[i + n][3] === W[i][3]) n++; return n; };
+  let curSpk = -1, paraWords = 0, last = null;
+  for (let i = 0; i < W.length; i++) {
+    const w = W[i];
+    while (ins < INSERTS.length && INSERTS[ins].t0 * 1000 <= w[0]) {
+      if (open) { html.push("</div>"); open = false; }
+      html.push(`<div class="insert" data-t="${INSERTS[ins].t0}"><svg class="i"><use href="#i-film"/></svg>${mmss(INSERTS[ins].t0)} · ${esc(INSERTS[ins].label)}</div>`);
+      ins++; curSpk = -1;
+    }
+    const spk = w[3], gap = last ? w[0] - last[1] : 0;
+    const isBc = spk !== curSpk && curSpk !== -1 && runLen(i) < 4 && gap < 2500;
+    const brk = !isBc && (spk !== curSpk || (gap > 1600 && paraWords > 70) || (last && w[0] < last[0] - 1000));
+    if (brk) {
+      if (open) html.push("</div>");
+      html.push(`<div class="para"><div class="spk"><span class="dot" style="background:${["#ff7700", "#0a84ff", "#34c759", "#af52de", "#ff2d55"][spk % 5]}"></span>${esc(String(SPK[spk] ?? `Speaker ${spk + 1}`).toUpperCase())}<span class="tcode" data-t="${w[0] / 1000}">${tc(w[0] / 1000)}</span></div>`);
+      open = true; curSpk = spk; paraWords = 0;
+    }
+    html.push(`<span class="w${isBc ? " bc" : ""}" data-i="${i}">${esc(w[2])}</span> `);
+    paraWords++; last = w;
+  }
+  while (ins < INSERTS.length) { if (open) { html.push("</div>"); open = false; } html.push(`<div class="insert" data-t="${INSERTS[ins].t0}"><svg class="i"><use href="#i-film"/></svg>${mmss(INSERTS[ins].t0)} · ${esc(INSERTS[ins].label)}</div>`); ins++; }
+  if (open) html.push("</div>");
+  $("#doc").innerHTML = html.join("");
+  wEls = new Array(W.length);
+  document.querySelectorAll("#doc .w").forEach((el) => wEls[+el.dataset.i] = el);
+  document.querySelectorAll("#doc .tcode, #doc .insert").forEach((el) => el.onclick = () => { v.pause(); seek(+el.dataset.t); });
+  $("#wcount").textContent = W.length.toLocaleString() + " words";
+}
+function wordAt(t) {   // last word starting at/before t (s)
+  let lo = 0, hi = T0.length - 1, ms = t * 1000, r = -1;
+  while (lo <= hi) { const m = (lo + hi) >> 1; if (T0[m] <= ms) { r = m; lo = m + 1; } else hi = m - 1; }
+  return r;
+}
+function scrollToTime(t, force) {
+  const i = Math.max(0, wordAt(t)); const el = wEls[i]; if (!el) return;
+  const wrap = $("#docwrap"), r = el.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+  if (force || r.top < wr.top + 60 || r.bottom > wr.bottom - 80) wrap.scrollTo({ top: wrap.scrollTop + r.top - wr.top - wr.height / 3, behavior: force ? "auto" : "smooth" });
+}
+
+// selection
+let sa = null, sb = null, dragging = false, downAt = null;
+const selRange = () => sa == null ? null : [Math.min(sa, sb), Math.max(sa, sb)];
+function paintSel() {
+  document.querySelectorAll("#doc .w.sel").forEach((e) => e.classList.remove("sel"));
+  const r = selRange(); const bar = $("#selbar");
+  if (!r) { bar.style.display = "none"; return; }
+  for (let i = r[0]; i <= r[1]; i++) wEls[i]?.classList.add("sel");
+  const n = r[1] - r[0] + 1, d = (W[r[1]][1] - W[r[0]][0]) / 1000;
+  $("#selinfo").textContent = `${n} word${n > 1 ? "s" : ""} · ${d.toFixed(1)}s`;
+  let anyCut = false; for (let i = r[0]; i <= r[1]; i++) if (cutMask[i]) { anyCut = true; break; }
+  $("#sRestore").style.display = anyCut ? "" : "none";
+  const el = wEls[r[1]], wrap = $("#docwrap"), er = el.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+  bar.style.display = "flex";
+  const x = Math.min(Math.max(8, er.left - wr.left - 40), wrap.clientWidth - bar.offsetWidth - 8);
+  bar.style.left = x + "px"; bar.style.top = (er.bottom - wr.top + wrap.scrollTop + 8) + "px";
+}
+const clearSel = () => { sa = sb = null; paintSel(); };
+$("#doc").addEventListener("mousedown", (e) => {
+  const el = e.target.closest(".w"); if (!el) { if (!e.target.closest("#selbar")) clearSel(); return; }
+  e.preventDefault(); document.activeElement?.blur();
+  const i = +el.dataset.i;
+  if (e.shiftKey && sa != null) { sb = i; paintSel(); return; }
+  sa = sb = i; dragging = true; downAt = i; paintSel();
+});
+$("#doc").addEventListener("mouseover", (e) => { if (!dragging) return; const el = e.target.closest(".w"); if (el) { sb = +el.dataset.i; paintSel(); } });
+document.addEventListener("mouseup", () => {
+  if (!dragging) return; dragging = false;
+  if (sa === sb && sa === downAt) {         // plain click: move the playhead to this word
+    v.pause(); seek(W[sa][0] / 1000 + 0.001); clearSel(); return;
+  }
+  paintSel();
+});
+
+// cuts
+function rebuildCuts() {
+  cutMask = new Uint8Array(W.length);
+  for (const c of cuts) for (let i = c.w0; i <= c.w1; i++) cutMask[i] = 1;
+  wEls.forEach((el, i) => el && el.classList.toggle("cut", !!cutMask[i]));
+  // merged skip ranges in seconds: from a deleted word's start to the next kept word's start
+  skipRanges = [];
+  for (let i = 0; i < W.length; i++) {
+    if (!cutMask[i]) continue;
+    let j = i; while (j + 1 < W.length && cutMask[j + 1]) j++;
+    const a = W[i][0] / 1000, b = (j + 1 < W.length ? Math.min(W[j + 1][0], W[j][1] + 400) : W[j][1]) / 1000;
+    skipRanges.push([a, Math.max(b, W[j][1] / 1000)]); i = j;
+  }
+  const words = cutMask.reduce((a, b) => a + b, 0), secs = skipRanges.reduce((a, [x, y]) => a + y - x, 0);
+  $("#c-cuts").textContent = cuts.length ? `${words}w · ${secs.toFixed(0)}s` : "0";
+  drawMarkers();
+}
+async function refreshCuts() { cuts = await api(`/api/cuts?asset=${encodeURIComponent(asset.slug)}`); rebuildCuts(); paintSel(); }
+async function deleteSel() {
+  const r = selRange(); if (!r) return;
+  needName(async () => {
+    const c = await api("/api/cuts", { method: "POST", body: JSON.stringify({ asset: asset.slug, w0: r[0], w1: r[1], author: me }) });
+    undoStack.push({ type: "cut", ids: [c.id] }); clearSel(); await refreshCuts();
+    toast(`Deleted ${r[1] - r[0] + 1} words · ⌘Z to undo`);
+  });
+}
+async function restoreSel() {
+  const r = selRange(); if (!r) return;
+  const hit = cuts.filter((c) => c.w1 >= r[0] && c.w0 <= r[1]); if (!hit.length) return;
+  const recreated = [];
+  for (const c of hit) {
+    await api(`/api/cuts/${c.id}`, { method: "DELETE" });
+    if (c.w0 < r[0]) recreated.push(await api("/api/cuts", { method: "POST", body: JSON.stringify({ asset: asset.slug, w0: c.w0, w1: r[0] - 1, author: c.author }) }));
+    if (c.w1 > r[1]) recreated.push(await api("/api/cuts", { method: "POST", body: JSON.stringify({ asset: asset.slug, w0: r[1] + 1, w1: c.w1, author: c.author }) }));
+  }
+  undoStack.push({ type: "restore", removed: hit, added: recreated.map((x) => x.id) });
+  clearSel(); await refreshCuts(); toast("Restored");
+}
+async function undo() {
+  const u = undoStack.pop(); if (!u) return toast("Nothing to undo");
+  if (u.type === "cut") for (const id of u.ids) await api(`/api/cuts/${id}`, { method: "DELETE" });
+  else {
+    for (const id of u.added) await api(`/api/cuts/${id}`, { method: "DELETE" });
+    for (const c of u.removed) await api("/api/cuts", { method: "POST", body: JSON.stringify({ asset: asset.slug, w0: c.w0, w1: c.w1, author: c.author }) });
+  }
+  await refreshCuts(); toast("Undone");
+}
+$("#sDel").onclick = deleteSel; $("#sRestore").onclick = restoreSel; $("#undoCut").onclick = undo;
+$("#sPlay").onclick = () => { const r = selRange(); if (!r) return; playUntil = W[r[1]][1] / 1000; seek(W[r[0]][0] / 1000); v.play(); };
+$("#sCmt").onclick = () => {
+  const r = selRange(); if (!r) return;
+  inPoint = W[r[0]][0] / 1000; outPoint = W[r[1]][1] / 1000; v.pause(); seek(inPoint);
+  quoteText = W.slice(r[0], r[1] + 1).map((w) => w[2]).join(" ");
+  $("#quote").textContent = "“" + (quoteText.length > 160 ? quoteText.slice(0, 160) + "…" : quoteText) + "”"; $("#quote").style.display = "block";
+  $("#range span").textContent = "Clear range"; clearSel(); $("#body").focus();
+};
+$("#showcut").onchange = (e) => $("#doc").classList.toggle("hidecuts", !e.target.checked);
+$("#cutsnav").onclick = () => { if (!cuts.length) return toast("No script cuts yet. Select words in the script and press Delete."); const c = cuts[(cutsnav.k = ((cutsnav.k ?? -1) + 1) % cuts.length)]; v.pause(); seek(c.t0_ms / 1000); scrollToTime(c.t0_ms / 1000, true); };
+const cutsnav = {};
+
+// find
+$("#findq").addEventListener("input", () => {
+  document.querySelectorAll("#doc .w.hit").forEach((e) => e.classList.remove("hit"));
+  const q = $("#findq").value.trim().toLowerCase().split(/\s+/).filter(Boolean); if (!q.length) return;
+  let first = null;
+  for (let i = 0; i + q.length <= W.length; i++) {
+    let ok = true; for (let k = 0; k < q.length; k++) if (!W[i + k][2].toLowerCase().replace(/[^\w$%']/g, "").startsWith(q[k].replace(/[^\w$%']/g, ""))) { ok = false; break; }
+    if (ok) { for (let k = 0; k < q.length; k++) wEls[i + k].classList.add("hit"); if (first == null) first = i; }
+  }
+  if (first != null) scrollToTime(W[first][0] / 1000, true);
+});
+
+// ---------- player ----------
+const dur = () => (isFinite(v.duration) && v.duration) || asset?.duration || 1;
+let playUntil = null;
+function seek(t) { v.currentTime = Math.max(0, Math.min(dur() - 0.01, t)); }
+function togglePlay() { if (v.paused) { clearInk(); v.play(); } else v.pause(); }
+$("#pp").onclick = togglePlay; $("#bigplay").onclick = togglePlay; v.onclick = () => { if (!tool) togglePlay(); };
+$("#fb").onclick = () => { v.pause(); seek(v.currentTime - 1 / FPS); };
+$("#ff").onclick = () => { v.pause(); seek(v.currentTime + 1 / FPS); };
+$("#rate").onchange = (e) => v.playbackRate = +e.target.value;
+$("#mute").onclick = () => { v.muted = !v.muted; $("#mute use").setAttribute("href", v.muted ? "#i-mute" : "#i-vol"); };
+$("#fs").onclick = () => $("#stage").requestFullscreen?.();
+v.addEventListener("play", () => { $("#pp use").setAttribute("href", "#i-pause"); $("#bigplay").style.display = "none"; });
+v.addEventListener("pause", () => { $("#pp use").setAttribute("href", "#i-play"); });
+v.addEventListener("seeked", showInkForTime);
+function chapterIdx(t) { let c = 0; CHAPTERS.forEach(([s], i) => { if (t >= s) c = i; }); return c; }
+let curW = -1, curChap = -1;
+function tick() {
+  const t = v.currentTime, d = dur();
+  if (!v.paused && $("#skip").checked) {
+    for (const [a, b] of skipRanges) if (t >= a && t < b - 0.02) { v.currentTime = b; const n = $("#skipnote"); n.style.display = "block"; clearTimeout(n.h); n.h = setTimeout(() => n.style.display = "none", 900); break; }
+  }
+  if (playUntil != null && t >= playUntil) { v.pause(); playUntil = null; }
+  $("#time").textContent = `${tc(t)} / ${tc(d)}`;
+  const ci = chapterIdx(t);
+  if (ci !== curChap) { curChap = ci; $("#chapname").textContent = CHAPTERS[ci]?.[1] || ""; document.querySelectorAll("#chapters .tbl").forEach((e) => e.classList.toggle("now", +e.dataset.i === ci)); }
+  $("#pl").style.width = (t / d * 100) + "%"; $("#hd").style.left = (t / d * 100) + "%";
+  if (v.buffered.length) $("#buf").style.width = (v.buffered.end(v.buffered.length - 1) / d * 100) + "%";
+  if (outPoint == null) $("#cin").textContent = inPoint != null ? `${tc(inPoint)} → …` : tc(t); else $("#cin").textContent = `${tc(inPoint)} → ${tc(outPoint)}`;
+  if (W.length) {
+    let i = wordAt(t); if (i >= 0 && t * 1000 > W[i][1] + 350) i = -1;
+    if (i !== curW) { wEls[curW]?.classList.remove("cur"); curW = i; if (i >= 0) { wEls[i]?.classList.add("cur"); if (!v.paused && $("#follow").checked && !dragging) scrollToTime(t); } }
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// timeline
+const tl = $("#tl");
+const tAt = (e) => { const r = tl.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * dur(); };
+let scrub = false;
+tl.addEventListener("pointerdown", (e) => { if (e.target.classList.contains("mk")) return; scrub = true; tl.setPointerCapture(e.pointerId); seek(tAt(e)); });
+tl.addEventListener("pointermove", (e) => { const tip = $("#tip"); tip.style.display = "block"; tip.style.left = (tAt(e) / dur() * 100) + "%"; tip.textContent = tc(tAt(e)); if (scrub) { seek(tAt(e)); scrollToTime(tAt(e), true); } });
+tl.addEventListener("pointerup", () => scrub = false);
+tl.addEventListener("pointerleave", () => $("#tip").style.display = "none");
+function drawMarkers() {
+  tl.querySelectorAll(".mk,.rg,.chap,.cutz").forEach((n) => n.remove());
+  const d = dur();
+  for (const [s] of CHAPTERS.slice(1)) { const c = document.createElement("div"); c.className = "chap"; c.style.left = (s / d * 100) + "%"; tl.appendChild(c); }
+  for (const [a, b] of skipRanges) { const z = document.createElement("div"); z.className = "cutz"; z.style.left = (a / d * 100) + "%"; z.style.width = Math.max(0.15, (b - a) / d * 100) + "%"; tl.appendChild(z); }
+  for (const c of comments.filter((c) => !c.parent_id)) {
+    if (c.t_end_ms != null) { const r = document.createElement("div"); r.className = "rg"; r.style.left = (c.t_ms / 1000 / d * 100) + "%"; r.style.width = ((c.t_end_ms - c.t_ms) / 1000 / d * 100) + "%"; tl.appendChild(r); }
+    const m = document.createElement("div"); m.className = "mk" + (c.resolved ? " res" : "") + (sel === c.id ? " sel" : "");
+    m.style.left = (c.t_ms / 1000 / d * 100) + "%"; m.title = `${tc(c.t_ms / 1000)} · ${c.author}: ${c.body}`;
+    m.onclick = (e) => { e.stopPropagation(); select(c.id, true); }; tl.appendChild(m);
+  }
+}
+v.addEventListener("loadedmetadata", drawMarkers);
+
+// ---------- drawing ----------
+const ink = $("#ink"), ctx = ink.getContext("2d");
+let tool = null, colorPick = "#ff3b30", strokes = [], cur = null, shown = null;
+function videoRect() {
+  const s = $("#stage").getBoundingClientRect(), vw = v.videoWidth || 1920, vh = v.videoHeight || 1080;
+  const k = Math.min(s.width / vw, s.height / vh), w = vw * k, h = vh * k;
+  return { x: (s.width - w) / 2, y: (s.height - h) / 2, w, h };
+}
+function fitInk() {
+  const r = videoRect(), dpr = devicePixelRatio || 1;
+  Object.assign(ink.style, { left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px" });
+  ink.width = r.w * dpr; ink.height = r.h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); render();
+}
+new ResizeObserver(fitInk).observe($("#stage")); v.addEventListener("loadedmetadata", fitInk);
+function drawStroke(s, Wd, H) {
+  ctx.strokeStyle = s.color; ctx.lineWidth = Math.max(3, Wd / 320); ctx.lineCap = "round"; ctx.lineJoin = "round";
+  const P = s.pts.map(([x, y]) => [x * Wd, y * H]); if (P.length < 2) return;
+  ctx.beginPath();
+  if (s.tool === "pen") { ctx.moveTo(...P[0]); for (const p of P.slice(1)) ctx.lineTo(...p); }
+  else if (s.tool === "rect") { const [a, b] = [P[0], P[P.length - 1]]; ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); }
+  else if (s.tool === "arrow") { const [a, b] = [P[0], P[P.length - 1]]; ctx.moveTo(...a); ctx.lineTo(...b);
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), L = Math.max(14, Wd / 50);
+    ctx.moveTo(...b); ctx.lineTo(b[0] - L * Math.cos(ang - .45), b[1] - L * Math.sin(ang - .45));
+    ctx.moveTo(...b); ctx.lineTo(b[0] - L * Math.cos(ang + .45), b[1] - L * Math.sin(ang + .45)); }
+  ctx.stroke();
+}
+function render() {
+  const Wd = ink.clientWidth, H = ink.clientHeight; ctx.clearRect(0, 0, Wd, H);
+  for (const s of (tool || strokes.length ? strokes : shown || [])) drawStroke(s, Wd, H);
+  if (cur) drawStroke(cur, Wd, H);
+}
+function clearInk() { shown = null; render(); }
+function showInkForTime() {
+  if (tool || strokes.length) return;
+  const c = comments.find((c) => c.id === sel);
+  shown = c && c.drawing && Math.abs(v.currentTime - c.t_ms / 1000) < 0.06 ? c.drawing : null; render();
+}
+function setTool(t) {
+  tool = tool === t ? null : t;
+  document.querySelectorAll("[data-tool]").forEach((b) => b.classList.toggle("on", b.dataset.tool === tool));
+  ink.classList.toggle("drawing", !!tool); $("#drawhint").style.display = tool ? "block" : "none";
+  if (tool) { v.pause(); shown = null; } render();
+}
+document.querySelectorAll("[data-tool]").forEach((b) => b.onclick = () => setTool(b.dataset.tool));
+document.querySelectorAll(".sw").forEach((s) => s.onclick = () => { colorPick = s.dataset.c; document.querySelectorAll(".sw").forEach((x) => x.classList.toggle("on", x === s)); });
+$("#undo").onclick = () => { strokes.pop(); render(); };
+const npos = (e) => { const r = ink.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; };
+ink.addEventListener("pointerdown", (e) => { if (!tool) return; ink.setPointerCapture(e.pointerId); cur = { tool, color: colorPick, pts: [npos(e)] }; });
+ink.addEventListener("pointermove", (e) => { if (!cur) return; if (cur.tool === "pen") cur.pts.push(npos(e)); else cur.pts[1] = npos(e); render(); });
+ink.addEventListener("pointerup", () => { if (cur && cur.pts.length > 1) strokes.push(cur); cur = null; render(); $("#body").focus(); });
+
+// ---------- comments ----------
+let inPoint = null, outPoint = null, quoteText = null;
+function clearRange() { inPoint = outPoint = null; quoteText = null; $("#range span").textContent = "Add range"; $("#quote").style.display = "none"; }
+$("#range").onclick = () => {
+  if (outPoint != null) return clearRange();
+  if (inPoint == null) { inPoint = v.currentTime; $("#range span").textContent = "Set out point"; toast("In point set. Move to the out point and click again."); return; }
+  outPoint = v.currentTime; if (outPoint < inPoint) [inPoint, outPoint] = [outPoint, inPoint];
+  $("#range span").textContent = "Clear range";
+};
+$("#body").addEventListener("focus", () => v.pause());
+$("#body").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) post(); });
+$("#post").onclick = post;
+function post() {
+  const text = $("#body").value.trim(); if (!text) return $("#body").focus();
+  needName(async () => {
+    const t = inPoint != null ? inPoint : v.currentTime;
+    const full = quoteText ? `“${quoteText}”\n${text}` : text;
+    const c = await api("/api/comments", { method: "POST", body: JSON.stringify({ asset: asset.slug, t_ms: Math.round(t * 1000),
+      t_end_ms: outPoint != null ? Math.round(outPoint * 1000) : undefined, author: me, body: full, drawing: strokes.length ? strokes : undefined }) });
+    $("#body").value = ""; strokes = []; clearRange();
+    if (tool) setTool(tool);
+    await refresh(); select(c.id, false);
+  });
+}
+async function refresh() { comments = await api(`/api/comments?asset=${encodeURIComponent(asset.slug)}`); renderList(); drawMarkers(); markCommentWords(); }
+function markCommentWords() {
+  document.querySelectorAll("#doc .w.cmt").forEach((e) => e.classList.remove("cmt"));
+  for (const c of comments) if (!c.parent_id && c.t_end_ms != null && !c.resolved) {
+    for (let i = Math.max(0, wordAt(c.t_ms / 1000)); i < W.length && W[i][0] < c.t_end_ms; i++) wEls[i]?.classList.add("cmt");
+  }
+}
+setInterval(() => { if (asset && !document.hidden && !typing() && !dragging && selRange() == null) { refresh(); refreshCuts(); } }, 15000);
+$("#q").oninput = renderList;
+document.querySelectorAll("[data-f]").forEach((el) => el.onclick = () => { filter = el.dataset.f; document.querySelectorAll("[data-f]").forEach((x) => x.classList.toggle("on", x === el)); renderList(); });
+function renderList() {
+  const top = comments.filter((c) => !c.parent_id), q = $("#q").value.trim().toLowerCase();
+  $("#c-all").textContent = top.length; $("#c-open").textContent = top.filter((c) => !c.resolved).length;
+  $("#c-res").textContent = top.filter((c) => c.resolved).length; $("#ccount").textContent = top.length;
+  const list = top.filter((c) => (filter === "all" || (filter === "open") === !c.resolved) && (!q || (c.body + " " + c.author).toLowerCase().includes(q)));
+  if (!list.length) {
+    $("#list").innerHTML = `<div class="empty"><div class="ico"><svg class="i"><use href="#i-msg"/></svg></div><b>No comments${top.length ? " match" : " yet"}</b>
+      <div style="margin-top:4px">Pause on a frame and leave a note, or select words in the script and click Comment.</div></div>`; return;
+  }
+  $("#list").innerHTML = list.map((c) => {
+    const reps = comments.filter((r) => r.parent_id === c.id);
+    const m = c.body.match(/^“([\s\S]*?)”\n([\s\S]*)$/);
+    const quote = m ? m[1] : null, text = m ? m[2] : c.body;
+    return `<div class="cm ${c.resolved ? "res" : ""} ${sel === c.id ? "sel" : ""}" data-id="${c.id}">
+      <div class="top"><div class="av" style="background:${color(c.author)}">${esc(c.author[0].toUpperCase())}</div>
+        <span class="who">${esc(c.author)}</span>
+        <span class="badge badge-brand badge-mono">${tc(c.t_ms / 1000)}${c.t_end_ms != null ? " → " + tc(c.t_end_ms / 1000) : ""}</span>
+        ${c.drawing ? `<svg class="i sm" style="color:var(--primary)"><use href="#i-pen"/></svg>` : ""}
+        ${c.task_status ? agentBadge(c) : ""}
+        <span class="grow"></span><span class="ago">${ago(c.created_at)}</span></div>
+      ${quote ? `<div class="quote">${esc(quote.length > 220 ? quote.slice(0, 220) + "…" : quote)}</div>` : ""}
+      <div class="txt">${esc(text).replace(/(^|[^\w@])(@agent)\b/gi, '$1<span class="at">$2</span>')}</div>
+      ${reps.map((r) => `<div class="reply"><b>${r.author === "Agent" ? "🤖 " : ""}${esc(r.author)}</b> · <span class="muted">${ago(r.created_at)}</span><div>${esc(r.body)}</div></div>`).join("")}
+      <div class="acts"><label><input type="checkbox" data-res="${c.id}" ${c.resolved ? "checked" : ""}>Resolved</label>
+        <button class="btn btn-ghost btn-xs" data-rep="${c.id}"><svg class="i sm"><use href="#i-reply"/></svg>Reply</button>
+        <button class="btn btn-ghost btn-icon btn-xs" data-del="${c.id}" title="Delete"><svg class="i sm"><use href="#i-trash"/></svg></button></div>
+    </div>`;
+  }).join("");
+  document.querySelectorAll(".cm").forEach((el) => el.onclick = (e) => { if (e.target.closest("button,input,label")) return; select(+el.dataset.id, true); });
+  document.querySelectorAll("[data-res]").forEach((el) => el.onchange = async () => { await api(`/api/comments/${el.dataset.res}`, { method: "PATCH", body: JSON.stringify({ resolved: el.checked }) }); refresh(); });
+  document.querySelectorAll("[data-del]").forEach((el) => el.onclick = () => dialog("Delete comment?", "This removes the comment and its replies.", "", [
+    ["Cancel", "btn-outline", closeDialog], ["Delete", "btn-primary", async () => { closeDialog(); await api(`/api/comments/${el.dataset.del}`, { method: "DELETE" }); refresh(); }]]));
+  document.querySelectorAll("[data-rep]").forEach((el) => el.onclick = () => {
+    const card = el.closest(".cm"); if (card.querySelector(".rbox")) return;
+    const box = document.createElement("div"); box.className = "rbox";
+    box.innerHTML = `<input placeholder="Reply…"><button class="btn btn-primary btn-xs">Send</button>`; card.appendChild(box);
+    const inp = box.querySelector("input"); inp.focus();
+    const send = () => needName(async () => { if (!inp.value.trim()) return; const p = comments.find((c) => c.id === +el.dataset.rep);
+      await api("/api/comments", { method: "POST", body: JSON.stringify({ asset: asset.slug, t_ms: p.t_ms, author: me, body: inp.value, parent_id: p.id }) }); refresh(); });
+    box.querySelector("button").onclick = send; inp.onkeydown = (e) => { if (e.key === "Enter") send(); };
+  });
+}
+function agentBadge(c) {
+  const t = { queued: "AI · queued", working: "AI · " + (c.task_note || "working"), done: "AI · done" + (c.task_version ? " → " + c.task_version : ""), failed: "AI · could not do it", canceled: "AI · canceled" }[c.task_status] || "AI";
+  return `<span class="abadge ${c.task_status}" title="${esc(c.task_note || t)}"><svg class="i sm"><use href="#i-bot"/></svg>${esc(t)}</span>`;
+}
+function select(id, jump) {
+  sel = id; const c = comments.find((x) => x.id === id);
+  if (c && jump) { v.pause(); seek(c.t_ms / 1000); scrollToTime(c.t_ms / 1000, true); }
+  renderList(); drawMarkers();
+  document.querySelector(`.cm[data-id="${id}"]`)?.scrollIntoView({ block: "nearest" });
+  setTimeout(showInkForTime, 120);
+}
+
+// ---------- keyboard ----------
+document.addEventListener("keydown", (e) => {
+  if (typing()) { if (e.key === "Escape") e.target.blur(); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === "z") { e.preventDefault(); undo(); return; }
+  if ((e.key === "Backspace" || e.key === "Delete") && selRange()) { e.preventDefault(); deleteSel(); return; }
+  if (e.key === "Escape") { if (tool) setTool(tool); clearSel(); return; }
+  if (e.key === " ") { e.preventDefault(); togglePlay(); }
+  else if (e.key === "ArrowLeft") { v.pause(); seek(v.currentTime - (e.shiftKey ? 1 : 1 / FPS)); }
+  else if (e.key === "ArrowRight") { v.pause(); seek(v.currentTime + (e.shiftKey ? 1 : 1 / FPS)); }
+  else if (e.key === "j") seek(v.currentTime - 5);
+  else if (e.key === "k") v.pause();
+  else if (e.key === "l") seek(v.currentTime + 5);
+  else if (e.key === "c") { e.preventDefault(); if (selRange()) $("#sCmt").click(); else $("#body").focus(); }
+});
+
+// ---------- export + download ----------
+$("#exmd").href = "#"; $("#excsv").href = "#";
+$("#exmd").onclick = (e) => { e.preventDefault(); location.href = `${BASE}/api/export.md`; };
+$("#excsv").onclick = (e) => { e.preventDefault(); location.href = `${BASE}/api/export.csv`; };
+$("#dl").onclick = async () => {
+  if (asset.rendered)
+    return dialog("MP4 for cloud renders", "This version was rendered in the cloud in chunks. The one-file MP4 export for it is not built yet. Ask the agent or check back after the next update.", "", [["OK", "btn-primary", closeDialog]]);
+  if (!window.showSaveFilePicker)
+    return dialog("Use Chrome or Edge to download", "The full MP4 is rebuilt in your browser from the streaming segments, which needs Chrome or Edge (Safari and Firefox can't write files that large).", "", [["OK", "btn-primary", closeDialog]]);
+  let handle;
+  try { handle = await showSaveFilePicker({ suggestedName: asset.file, types: [{ description: "MP4 video", accept: { "video/mp4": [".mp4"] } }] }); } catch { return; }
+  const out = await handle.createWritable(), segs = await api("/api/segments");
+  $("#dl").disabled = true; $("#dlprog").style.display = "flex";
+  let got = 0; const t0 = performance.now();
+  try {
+    for (let i = 0; i < segs.length; i++) {
+      let buf = null;
+      for (let a = 1; a <= 6 && !buf; a++) {
+        try { const r = await fetch(`${BASE}/hls/${segs[i]}`); if (!r.ok) throw new Error(r.status); buf = await r.arrayBuffer(); }
+        catch { $("#dltxt").textContent = `retrying ${i + 1}/${segs.length}…`; await new Promise((r) => setTimeout(r, 1200 * a)); }
+      }
+      if (!buf) throw new Error("segment " + segs[i]);
+      await out.write(buf); got += buf.byteLength;
+      $("#dlfill").style.width = Math.min(100, got / asset.size * 100).toFixed(1) + "%";
+      $("#dltxt").textContent = `${(got / 1e9).toFixed(2)} / ${(asset.size / 1e9).toFixed(2)} GB · ${(got / 1e6 / ((performance.now() - t0) / 1000)).toFixed(1)} MB/s`;
+    }
+    await out.close(); $("#dlfill").style.width = "100%"; $("#dltxt").textContent = "Saved " + asset.file; toast("Saved " + asset.file);
+  } catch (err) { await out.close().catch(() => {}); $("#dltxt").textContent = "Stopped: " + err.message; }
+  $("#dl").disabled = false;
+};
+
+// ---------- sources (owner only): browser multipart upload straight to project storage ----------
+const root = async (p, o = {}) => { const r = await fetch(p, { ...o, headers: { "Content-Type": "application/json" } }); if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status); return r.json(); };
+const fmtSize = (n) => n >= 1e9 ? (n / 1e9).toFixed(2) + " GB" : Math.max(1, Math.round(n / 1e6)) + " MB";
+let sources = [], uploads = new Map(), upQueue = [], upRunning = false;
+async function refreshSources() {
+  if (BOOT.shared) return;
+  sources = await root(`/api/projects/${encodeURIComponent(BOOT.slug)}/sources`).catch(() => sources);
+  renderSources();
+}
+function renderSources() {
+  const live = [...uploads.values()].filter((u) => !sources.some((s) => s.id === u.id));
+  const rows = [...sources.map((s) => ({ ...s, up: uploads.get(s.id) })), ...live.map((u) => ({ id: u.id, label: u.label, size: u.size, status: "uploading", up: u }))];
+  if (!rows.length) { $("#srclist").innerHTML = `<div class="srcempty">No source files yet</div>`; return; }
+  $("#srclist").innerHTML = rows.map((s) => {
+    const u = s.up, pct = u ? Math.floor(u.sent / u.size * 100) : 0;
+    const tx = { queued: " · transcript queued", working: " · transcribing…", done: ` · ${(s.tx_words || 0).toLocaleString()} words`, failed: " · transcript failed" }[s.tx_status] || "";
+    const state = u ? (u.error ? "failed" : u.waiting ? "waiting" : `${pct}%`) : s.status === "ready" ? fmtSize(Number(s.size)) + tx : "stopped";
+    return `<div class="src ${(u?.error || (!u && s.status !== "ready")) ? "bad" : ""}" data-src="${s.id ?? ""}">
+      <div class="row1"><svg class="i sm"><use href="#i-film"/></svg><span class="nm" title="${esc(s.file_name || s.label)}">${esc(s.label)}</span><span class="ct">${state}</span></div>
+      ${u && !u.error ? `<div class="bar"><i style="width:${pct}%"></i></div>` : ""}</div>`;
+  }).join("");
+  document.querySelectorAll("[data-src]").forEach((el) => el.onclick = () => { const s = sources.find((x) => x.id === +el.dataset.src); if (s) sourceDialog(s); });
+}
+function sourceDialog(s) {
+  const ready = s.status === "ready", url = `/api/sources/${s.id}/file`;
+  dialog(s.label, `${s.file_name} · ${fmtSize(Number(s.size))}${ready ? "" : " · upload did not finish, delete it and upload again"}`,
+    ready ? `<video controls preload="metadata" src="${url}" style="width:100%;max-height:40vh;background:#000;border-radius:8px"></video>
+      <div class="muted" style="font-size:12px;margin-top:6px">Some camera formats (ProRes, MXF) do not play in the browser. Open file downloads them.</div>
+      <div style="margin-top:12px"><input id="slabel" value="${esc(s.label)}" placeholder="Label = speaker name for this mic, e.g. Alex"></div>
+      <div class="txbox" id="stx">${{ done: "Loading transcript…", queued: "Transcript queued. Each source is transcribed after upload; its label is the speaker.", working: "Transcribing… this takes about 1 minute per 10 minutes of audio.", failed: "Transcript failed: " + esc(s.tx_error || "") , skipped: "No transcript: " + esc(s.tx_error || "no audio") }[s.tx_status] || "No transcript."}</div>` : "",
+    [["Delete", "btn-outline", () => dialog("Delete source file?", `${s.label} is removed from storage. You cannot undo it.`, "", [["Cancel", "btn-outline", closeDialog],
+       ["Delete", "btn-primary", async () => { closeDialog(); await root(`/api/sources/${s.id}`, { method: "DELETE" }); refreshSources(); }]])],
+     ...(ready && ["failed", "none", "skipped"].includes(s.tx_status) ? [["Transcribe", "btn-outline", async () => { closeDialog(); await root(`/api/sources/${s.id}/transcribe`, { method: "POST" }); toast("Transcript queued"); refreshSources(); }]] : []),
+     ...(ready ? [["Open file", "btn-outline", () => window.open(url, "_blank")]] : []),
+     ["Done", "btn-primary", async () => { const l = $("#slabel")?.value.trim(); closeDialog(); if (l && l !== s.label) { await root(`/api/sources/${s.id}`, { method: "PATCH", body: JSON.stringify({ label: l }) }); refreshSources(); } }]], ready);
+  loadSourceTranscript(s);
+}
+async function loadSourceTranscript(s) {
+  if (s.tx_status !== "done") return;
+  const tr = await root(`/api/sources/${s.id}/transcript`).catch(() => null), box = $("#stx"); if (!box || !tr) return;
+  const out = []; let cur = null;
+  for (const w of tr.words) { if (!cur || w[0] - cur.end > 2500) { cur = { t: w[0], end: w[1], words: [] }; out.push(cur); } cur.words.push(w[2]); cur.end = w[1]; }
+  box.innerHTML = out.length ? out.map((p) => `<b class="muted" style="font:11px var(--mono)">${tc(p.t / 1000)}</b> ${esc(p.words.join(" "))}`).join("\n") : "No speech found.";
+}
+function addFiles(files) {
+  if (BOOT.shared || !files.length) return;
+  let k = 0;
+  for (const f of files) { const tmp = `tmp${Date.now()}${k++}`; uploads.set(tmp, { id: tmp, file: f, label: f.name.replace(/\.[^.]+$/, ""), size: f.size, sent: 0, waiting: true }); }
+  renderSources(); runUploads();
+}
+async function runUploads() {
+  if (upRunning) return; upRunning = true;
+  for (let u; (u = [...uploads.values()].find((x) => x.waiting)); ) { u.waiting = false; try { await uploadOne(u); } catch (e) { u.error = e.message; toast(`Upload failed: ${u.label}: ${e.message}`); renderSources(); } }
+  upRunning = false;
+}
+async function uploadOne(u) {
+  const f = u.file;
+  const s = await root(`/api/projects/${encodeURIComponent(BOOT.slug)}/sources`, { method: "POST",
+    body: JSON.stringify({ file_name: f.name, size: f.size, content_type: f.type || undefined, label: u.label }) });
+  uploads.delete(u.id); u.id = s.id; uploads.set(s.id, u); renderSources();
+  const todo = Array.from({ length: s.parts }, (_, i) => i + 1), urls = {}, done = new Array(s.parts + 1).fill(0);
+  // `from` is the part a worker holds (it is no longer in todo); sign it and the next ones still waiting
+  const sign = async (from) => { const nums = [from, ...todo.filter((n) => n > from)].filter((n) => !urls[n]).slice(0, 20); Object.assign(urls, (await root(`/api/sources/${s.id}/parts`, { method: "POST", body: JSON.stringify({ parts: nums }) })).urls); };
+  let last = 0;
+  const worker = async () => {
+    for (let n; (n = todo.shift()) !== undefined; ) {
+      const blob = f.slice((n - 1) * s.part_size, Math.min(f.size, n * s.part_size));
+      for (let a = 1; ; a++) {
+        try {
+          if (!urls[n]) await sign(n);
+          await new Promise((ok, bad) => {      // XHR for upload progress inside a part
+            const x = new XMLHttpRequest(); x.open("PUT", urls[n]);
+            x.upload.onprogress = (e) => { done[n] = e.loaded; u.sent = done.reduce((a, b) => a + b, 0); if (Date.now() - last > 250) { last = Date.now(); renderSources(); } };
+            x.onload = () => x.status < 300 ? ok() : bad(new Error("HTTP " + x.status)); x.onerror = () => bad(new Error("network"));
+            x.send(blob);
+          });
+          done[n] = blob.size; break;
+        } catch (e) { done[n] = 0; delete urls[n]; if (a >= 5) throw new Error(`part ${n}: ${e.message}`); await new Promise((r) => setTimeout(r, 1500 * a)); }
+      }
+    }
+  };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  await root(`/api/sources/${s.id}/complete`, { method: "POST" });
+  uploads.delete(s.id); toast(`Uploaded ${u.label}`); await refreshSources();
+}
+$("#srcAdd").onclick = $("#neUp").onclick = () => $("#srcFile").click();
+$("#srcFile").onchange = (e) => { addFiles([...e.target.files]); e.target.value = ""; };
+let dragN = 0;
+const hasFiles = (e) => !BOOT.shared && [...(e.dataTransfer?.types || [])].includes("Files");
+addEventListener("dragenter", (e) => { if (!hasFiles(e)) return; e.preventDefault(); dragN++; $("#drop").style.display = "flex"; });
+addEventListener("dragover", (e) => { if (hasFiles(e)) e.preventDefault(); });
+addEventListener("dragleave", (e) => { if (!hasFiles(e)) return; if (--dragN <= 0) { dragN = 0; $("#drop").style.display = "none"; } });
+addEventListener("drop", (e) => { if (!hasFiles(e)) return; e.preventDefault(); dragN = 0; $("#drop").style.display = "none"; addFiles([...e.dataTransfer.files]); });
+addEventListener("beforeunload", (e) => { if ([...uploads.values()].some((u) => !u.error)) { e.preventDefault(); e.returnValue = ""; } });
+setInterval(() => { if (!BOOT.shared && !uploads.size && !document.hidden) refreshSources(); }, 30000);
+
+// ---------- coding agent prompt (owner only) ----------
+async function agentDialog() {
+  const text = await (await fetch(`/api/projects/${encodeURIComponent(BOOT.slug)}/agent-prompt`)).text();
+  dialog("Copy for coding agent", "Paste this into Claude Code (or any coding agent). It has this project's agent token, the MCP setup line, the source files and the @agent queue steps. Keep it private.",
+    `<div class="codebox"><pre id="agentText">${esc(text)}</pre><button class="btn btn-xs" id="agentCopy"><svg class="i sm"><use href="#i-copy"/></svg>Copy for agent</button></div>`,
+    [["New token", "btn-outline", () => dialog("Replace the agent token?", "Agents using the old token (MCP, add-video --token) stop working until they get the new prompt.", "",
+        [["Cancel", "btn-outline", agentDialog], ["Replace", "btn-primary", async () => { await root(`/api/projects/${encodeURIComponent(BOOT.slug)}/agent-token`, { method: "POST" }); agentDialog(); toast("New token made"); }]])],
+     ["Done", "btn-primary", closeDialog]], true);
+  $("#agentCopy").onclick = async () => { try { await navigator.clipboard.writeText(text); toast("Prompt copied. Paste it into your coding agent."); } catch { $("#agentText").focus(); } };
+}
+$("#agent").onclick = $("#neAgent").onclick = agentDialog;
+
+// ---------- first cut (owner only, before the first edit): the brief becomes an agent task ----------
+let firstCut = null;
+const fcUrl = () => `/api/projects/${encodeURIComponent(BOOT.slug)}/first-cut`;
+async function refreshFirstCut() {
+  if (BOOT.shared || asset?.has_edit) return;
+  const r = await root(fcUrl()).catch(() => null);
+  if (!r) return;
+  firstCut = r.task; renderFirstCut();
+  // the agent publishes v1, then completes the task: load the review video once it is up
+  if (firstCut?.status === "done" && (await api("/api/project").catch(() => ({}))).has_edit) location.reload();
+}
+function renderFirstCut() {
+  const t = firstCut, el = $("#fcState"), live = t && ["queued", "working"].includes(t.status);
+  $("#neCut").style.display = live ? "none" : "";
+  $("#neCut span").textContent = t?.status === "failed" ? "Try the first cut again" : "Ask the agent for a first cut";
+  if (!t || t.status === "canceled") { el.style.display = "none"; return; }
+  el.style.display = "";
+  el.innerHTML = t.status === "queued" ? `<b>First cut queued.</b> The next agent that works this project's @agent queue picks it up. <a href="#" id="fcCancel">Cancel</a>`
+    : t.status === "working" ? `<b>Agent at work:</b> ${esc(t.note || "editing")}`
+    : t.status === "failed" ? `<b>The agent could not make the cut:</b> ${esc(t.note || "no reason given")}`
+    : `<b>First cut done${t.result_version ? " (" + esc(t.result_version) + ")" : ""}.</b> Loading the video…`;
+  const c = $("#fcCancel");
+  if (c) c.onclick = async (e) => { e.preventDefault(); firstCut = (await root(fcUrl(), { method: "DELETE" })).task; renderFirstCut(); };
+}
+function firstCutDialog() {
+  if (!sources.some((s) => s.status === "ready"))
+    return dialog("Upload the source files first", "The agent makes the first cut from the source files and their transcripts.", "", [["OK", "btn-primary", closeDialog]]);
+  const b = firstCut?.brief || {}, waiting = sources.filter((s) => ["queued", "working"].includes(s.tx_status)).length;
+  dialog("Ask the agent for a first cut",
+    "The agent reads every source transcript, picks the best takes, drops stumbles and retakes, builds the edit and posts v1 with a note on what it chose." + (waiting ? ` ${waiting} transcript${waiting > 1 ? "s are" : " is"} still running; the agent waits for them.` : ""),
+    `<div class="fl">What is this video for?</div>
+     <textarea id="fcGoal" rows="3" placeholder="e.g. 30 s Meta ad for Graphed. Hook on 'you don't need a data team'. End on 'book a call'.">${esc(b.goal || "")}</textarea>
+     <div style="display:flex;gap:10px">
+       <div style="flex:1"><div class="fl">Format</div><select id="fcFormat">
+         <option value="vertical">Vertical 9:16 (Reels, TikTok, Shorts)</option><option value="square">Square 1:1</option>
+         <option value="landscape">Landscape 16:9 (YouTube, podcast)</option></select></div>
+       <div style="flex:1"><div class="fl">Length</div><input id="fcLen" placeholder="30 s, 60–90 s, full length" value="${esc(b.length || "")}"></div>
+     </div>
+     <div class="fl">Keep, avoid, style (optional)</div>
+     <textarea id="fcNotes" rows="2" placeholder="e.g. Keep the pricing story. Cut the part about the old dashboard. Lower third with names.">${esc(b.notes || "")}</textarea>`,
+    [["Cancel", "btn-outline", closeDialog], ["Ask the agent", "btn-primary", async () => {
+      const goal = $("#fcGoal").value.trim(); if (!goal) return $("#fcGoal").focus();
+      try {
+        firstCut = (await root(fcUrl(), { method: "POST", body: JSON.stringify({ goal, format: $("#fcFormat").value, length: $("#fcLen").value, notes: $("#fcNotes").value, by: me }) })).task;
+        closeDialog(); renderFirstCut(); toast("First cut queued for the agent");
+      } catch (e) { toast("Could not queue it: " + e.message); }
+    }]]);
+  if (b.format) $("#fcFormat").value = b.format;
+  setTimeout(() => $("#fcGoal").focus(), 40);
+}
+$("#neCut").onclick = () => needName(firstCutDialog);
+
+// ---------- cloud render progress (owner only) ----------
+let renderTimer = null;
+function watchRender(r) {
+  clearTimeout(renderTimer);
+  if (!r) return;
+  const live = ["queued", "rendering"].includes(r.status);
+  if (live) {
+    const parts = r.chunks_total ? ` · ${(r.chunks_done || 0) + (r.chunks_cached || 0)}/${r.chunks_total} chunks${r.chunks_cached ? ` (${r.chunks_cached} reused)` : ""}` : "";
+    playerMsg(`Rendering ${r.version} in the cloud${parts}`);
+    renderTimer = setTimeout(async () => {
+      const p = await api("/api/project").catch(() => null); if (!p) return watchRender(r);
+      if (p.render?.status === "done" && p.render.id === r.id) { playerMsg(`${r.version} is ready. Loading…`); return location.reload(); }
+      watchRender(p.render);
+    }, 4000);
+  } else if (r.status === "failed" && Date.now() - new Date(r.finished_at || 0) < 3600e3) playerMsg(`Render ${r.version} failed: ${r.error || "unknown error"}`);
+}
+
+// ---------- share (owner only) ----------
+async function shareDialog() {
+  const p = await api("/api/project");
+  const link = p.share ? location.origin + p.share : "";
+  const call = async (b) => { await fetch(`/api/projects/${encodeURIComponent(BOOT.slug)}/share`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(b) }); closeDialog(); shareDialog(); };
+  dialog(p.share ? "Share link is on" : "Share this video",
+    p.share ? "Anyone with this link can watch, comment and cut the script for this video only. No Graphed login." : "This video is private. Turn on a link to let someone outside Graphed watch, comment and cut the script.",
+    p.share ? `<div style="display:flex;gap:6px"><input id="shl" readonly value="${esc(link)}"><button class="btn btn-outline btn-sm" id="shc">Copy</button></div>` : "",
+    p.share ? [["Turn off", "btn-outline", () => call({ on: false })], ["New link", "btn-outline", () => call({ rotate: true })], ["Done", "btn-primary", closeDialog]]
+            : [["Cancel", "btn-outline", closeDialog], ["Turn on link", "btn-primary", () => call({ on: true })]]);
+  const c = $("#shc"); if (c) c.onclick = async () => { await navigator.clipboard.writeText(link).catch(() => $("#shl").select()); toast("Link copied"); };
+}
+$("#share").onclick = shareDialog;
+
+load().catch((e) => toast("Load failed: " + e.message));
+</script>
+</body>
+</html>

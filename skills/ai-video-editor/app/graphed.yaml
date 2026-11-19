@@ -1,0 +1,24 @@
+slug: ai-video-editor
+name: AI Video Editor
+
+# Frame.io + Descript-style review app where a coding agent edits video: one project per video, each with its
+# source files, transcripts, comments, script cuts, edit documents and rendered versions.
+# Private by default: everything needs a Graphed login at the gateway, except
+#   /public/<token>  a share link for ONE project; the owner turns it on, off or replaces it. server.mjs answers
+#                    only for a project with sharing on, and sets X-Robots-Tag: noindex on every response.
+#   /agent/*         the agent API (REST + MCP): agent.mjs refuses every request without that project's bearer
+#                    token (one per project, from Copy for agent or `node cli.mjs token <slug>`).
+# The gateway needs each regex to match the whole path.
+services:
+  web:
+    command: node server.mjs
+    port: 3000
+    healthcheck: /health
+    public:
+      paths:
+        - ^/public/.*$
+        - ^/agent(/.*)?$
+
+databases:
+  primary:
+    env: DATABASE_URL
