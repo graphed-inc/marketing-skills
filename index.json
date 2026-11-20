@@ -3,7 +3,7 @@
   "scaffolds": [
     {
       "name": "base",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "path": "scaffold",
       "description": "Minimal marketing-software spine: Postgres + cron job + Next.js dashboard with plugin slots"
     }
@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "seo",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "kind": "channel",
       "path": "plugins/seo",
       "summary": "SEO agent: keyword queue, AI article drafts, CMS publishing, published-article refresh, dashboard overview",
@@ -28,7 +28,7 @@
     },
     {
       "name": "google-ads",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "kind": "channel",
       "path": "plugins/google-ads",
       "summary": "Google Ads agent: daily Testing → Winners loop, locked Mastra tools, KPI + sessions dashboard",
@@ -46,7 +46,7 @@
     },
     {
       "name": "outbound",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "kind": "channel",
       "path": "plugins/outbound",
       "summary": "Cold outbound agent: Instantly campaigns, one playbook document each, draft or auto-send replies",
@@ -93,13 +93,13 @@
     },
     {
       "name": "post-engagers",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/post-engagers",
       "summary": "Deploy a hosted LinkedIn post-engagers app: post or tracked-profile engagers, full profiles, GetLeads → LeadMagic → Apollo emails verified with MillionVerifier, table + CSV"
     },
     {
       "name": "enrichment-tables",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/enrichment-tables",
       "summary": "Deploy a hosted Clay-style enrichment table: lead search, email/phone waterfalls verified with MillionVerifier, company data, AI web research, formulas, HTTP columns, CSV"
     },
@@ -117,7 +117,7 @@
     },
     {
       "name": "ugc-studio",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "path": "skills/ugc-studio",
       "summary": "Deploy a hosted UGC video studio: campaigns of scripts x avatars, 65 built-in avatars, scripts from your website's Reddit pains, parallel Seedance renders with word fixes"
     },

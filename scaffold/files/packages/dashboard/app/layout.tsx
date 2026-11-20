@@ -14,10 +14,15 @@ export const metadata: Metadata = {
   description: "__PROJECT_NAME__ — running on Graphed",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   // SidebarProvider writes sidebar_state and uses defaultOpen as its initial
   // value. It does not read the cookie itself.
-  const defaultOpen = cookies().get("sidebar_state")?.value !== "false";
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>

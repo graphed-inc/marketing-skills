@@ -50,8 +50,9 @@ function formatStat(value: number | undefined): string {
 export default async function OutboundPage({
   searchParams,
 }: {
-  searchParams?: { notice?: string; error?: string };
+  searchParams?: Promise<{ notice?: string; error?: string }>;
 }) {
+  const query = (await searchParams) ?? {};
   const connected = instantlyConnected();
   let loadError: string | null = null;
   let campaigns: Awaited<ReturnType<typeof listOutboundCampaigns>> = [];
@@ -117,7 +118,7 @@ export default async function OutboundPage({
         </form>
       </div>
 
-      <Notices notice={searchParams?.notice} error={searchParams?.error} />
+      <Notices notice={query.notice} error={query.error} />
       {loadError ? (
         <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-100">
           Could not read campaigns ({loadError}). Run <code>npm run db:migrate</code>{" "}

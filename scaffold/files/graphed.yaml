@@ -5,7 +5,7 @@ name: __PROJECT_NAME__
 # compatibility; it is stripped on deploy and never sent to the server.
 scaffold:
   name: base
-  version: 0.1.0
+  version: 0.2.0
 
 databases:
   primary:

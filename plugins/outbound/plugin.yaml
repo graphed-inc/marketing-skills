@@ -1,5 +1,5 @@
 name: outbound
-version: 0.1.0
+version: 0.2.0
 kind: channel
 summary: Cold outbound agent — Instantly campaigns, one playbook document each, draft or auto-send replies
 description: >
@@ -44,4 +44,4 @@ provides:
     - /outbound
 
 compat:
-  scaffold: ">=0.1.0"
+  scaffold: ">=0.2.0"

@@ -1,5 +1,5 @@
 name: seo
-version: 0.3.0
+version: 0.4.0
 kind: channel
 summary: SEO agent — keyword queue, AI article drafts, CMS publishing, published-article refresh, dashboard overview
 description: >
@@ -70,4 +70,4 @@ provides:
     - /seo
 
 compat:
-  scaffold: ">=0.1.0"
+  scaffold: ">=0.2.0"

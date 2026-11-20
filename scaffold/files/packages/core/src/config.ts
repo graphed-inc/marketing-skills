@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { z, type ZodTypeAny } from "zod";
+import { z } from "zod";
 
 // Environment access for every process type (jobs, dashboard routes, scripts).
 //
@@ -46,8 +46,19 @@ export function loadLocalEnv(): void {
   process.loadEnvFile(envFile);
 }
 
+/**
+ * A string that must be present. `message` is used only when the value is
+ * missing (`undefined`). Later checks (`.min()`, `.url()`, `.refine()`) keep
+ * their own messages.
+ */
+export function requiredString(message: string) {
+  return z.string({
+    error: (issue) => (issue.input === undefined ? message : undefined),
+  });
+}
+
 /** Validates process.env against a domain schema (after loading .env). */
-export function envSlice<S extends ZodTypeAny>(schema: S): z.infer<S> {
+export function envSlice<S extends z.ZodType>(schema: S): z.infer<S> {
   loadLocalEnv();
   const result = schema.safeParse(process.env);
   if (!result.success) {
@@ -63,9 +74,9 @@ export function envSlice<S extends ZodTypeAny>(schema: S): z.infer<S> {
 
 const coreEnvSchema = z.object({
   // Local: from .env (see env.example). Cloud: injected from databases.primary.
-  DATABASE_URL: z
-    .string({ required_error: "DATABASE_URL is not set — copy env.example to .env locally" })
-    .min(1, "DATABASE_URL is not set — copy env.example to .env locally"),
+  DATABASE_URL: requiredString(
+    "DATABASE_URL is not set — copy env.example to .env locally",
+  ).min(1, "DATABASE_URL is not set — copy env.example to .env locally"),
 });
 
 let cachedCoreEnv: z.infer<typeof coreEnvSchema> | null = null;

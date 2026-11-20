@@ -154,16 +154,17 @@ type SeoTab = (typeof TABS)[number]["key"];
 export default async function SeoPage({
   searchParams,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     tab?: string;
     article?: string;
     notice?: string;
     error?: string;
     playbook?: string;
-  };
+  }>;
 }) {
-  const tab: SeoTab = TABS.some((t) => t.key === searchParams.tab)
-    ? (searchParams.tab as SeoTab)
+  const query = await searchParams;
+  const tab: SeoTab = TABS.some((t) => t.key === query.tab)
+    ? (query.tab as SeoTab)
     : "queue";
   const queue = tab === "queue" ? await loadQueue() : [];
   // Metrics are best-effort: a warehouse outage must not break the console —
@@ -187,7 +188,7 @@ export default async function SeoPage({
   const playbookOverrides =
     tab === "playbook" ? await loadPlaybookOverrides() : new Set<string>();
 
-  const articleId = searchParams.article ? Number(searchParams.article) : null;
+  const articleId = query.article ? Number(query.article) : null;
   const openArticle =
     articleId && Number.isFinite(articleId) ? await loadArticle(articleId) : null;
 
@@ -218,11 +219,11 @@ export default async function SeoPage({
         </nav>
       </div>
 
-      {searchParams.error ? (
-        <Banner tone="error" message={searchParams.error} />
+      {query.error ? (
+        <Banner tone="error" message={query.error} />
       ) : null}
-      {searchParams.notice ? (
-        <Banner tone="notice" message={searchParams.notice} />
+      {query.notice ? (
+        <Banner tone="notice" message={query.notice} />
       ) : null}
 
       {tab === "queue" ? (
@@ -416,7 +417,7 @@ export default async function SeoPage({
           defaults={DEFAULT_PLAYBOOKS}
           initial={playbooks}
           overridden={[...playbookOverrides]}
-          initialStage={searchParams.playbook}
+          initialStage={query.playbook}
         />
       ) : null}
 

@@ -147,16 +147,43 @@ Do not apply against a live Ads account just to try the kit.
 | `testing_ad_group_id` | `""` | Pin the ad group; otherwise first enabled or create Discovery |
 | `target` | `""` | Catalog host; empty → landing-page hostname |
 
+## Scaffold 0.1.0
+
+This kit needs scaffold `>=0.2.0`. `graphed plugins add` stops on a `0.1.0`
+stamp. `--force` only stages this kit. Upgrade the project first, then set
+`scaffold.version` in `graphed.yaml` to `0.2.0`.
+
+- `packages/core`: `kysely` `^0.29.9`, `zod` `^4.6.7`.
+- `packages/dashboard`: `next` `^16.4.6`. If `postcss` is a direct
+  dependency, `^8.5.23`.
+- In `packages/core/src/config.ts`, import `ZodType` instead of
+  `ZodTypeAny`. Add this and use it anywhere a schema used `required_error`:
+
+  ```ts
+  export function requiredString(message: string) {
+    return z.string({
+      error: (issue) => (issue.input === undefined ? message : undefined),
+    });
+  }
+  ```
+
+- Import `Migrator` and `FileMigrationProvider` from `kysely/migration`.
+- Next 16: `await cookies()`, and await `params` and `searchParams`. In
+  `next.config.mjs`, move `outputFileTracingRoot` to the top level, rename
+  `experimental.serverComponentsExternalPackages` to `serverExternalPackages`,
+  and drop `experimental.instrumentationHook`.
+- `npm install`, then `npm audit` should be clean.
+
 ## Steps
 
 1. **Add npm dependencies and nested exports** in
    `packages/core/package.json`. Dependencies:
 
    ```json
-   "@ai-sdk/openai": "^2.0.0",
+   "@ai-sdk/openai": "^3.0.97",
    "@graphed-inc/sdk": "^0.0.4",
    "@mastra/core": "^1.67.0",
-   "google-auth-library": "^9.15.1"
+   "google-auth-library": "^10.0.0"
    ```
 
    Jobs and the dashboard import `@app/core/google-ads/run` (and friends).

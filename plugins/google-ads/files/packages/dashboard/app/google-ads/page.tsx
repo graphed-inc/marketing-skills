@@ -62,9 +62,10 @@ function roleBadge(role: string) {
 export default async function GoogleAdsPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
-  const tab = searchParams.tab === "sessions" ? "sessions" : "overview";
+  const query = await searchParams;
+  const tab = query.tab === "sessions" ? "sessions" : "overview";
   const client = loadClientConfig();
 
   return (
@@ -90,7 +91,7 @@ export default async function GoogleAdsPage({
       ) : (
         <Sessions
           clientKey={client.client_key}
-          selectedId={searchParams.run}
+          selectedId={query.run}
         />
       )}
     </div>

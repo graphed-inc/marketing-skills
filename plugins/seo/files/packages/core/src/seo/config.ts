@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { z } from "zod";
-import { envSlice, projectRoot } from "../config";
+import { envSlice, projectRoot, requiredString } from "../config";
 import type { ClientConfig } from "./types";
 
 export interface SeoConfig {
@@ -96,12 +96,14 @@ export function loadSeoRefreshSettings(): SeoRefreshSettings {
 // CMS secrets load lazily — only the selected CMS's env vars are required.
 
 const ghostEnvSchema = z.object({
-  GHOST_API_URL: z
-    .string({ required_error: "GHOST_API_URL is not set" })
-    .min(1, "GHOST_API_URL is not set"),
-  GHOST_ADMIN_API_KEY: z
-    .string({ required_error: "GHOST_ADMIN_API_KEY is not set" })
-    .min(1, "GHOST_ADMIN_API_KEY is not set"),
+  GHOST_API_URL: requiredString("GHOST_API_URL is not set").min(
+    1,
+    "GHOST_API_URL is not set",
+  ),
+  GHOST_ADMIN_API_KEY: requiredString("GHOST_ADMIN_API_KEY is not set").min(
+    1,
+    "GHOST_ADMIN_API_KEY is not set",
+  ),
 });
 
 export function ghostCredentials(): { apiUrl: string; adminApiKey: string } {
@@ -113,15 +115,14 @@ export function ghostCredentials(): { apiUrl: string; adminApiKey: string } {
 }
 
 const wordpressEnvSchema = z.object({
-  WP_URL: z
-    .string({ required_error: "WP_URL is not set" })
-    .min(1, "WP_URL is not set"),
-  WP_USERNAME: z
-    .string({ required_error: "WP_USERNAME is not set" })
-    .min(1, "WP_USERNAME is not set"),
-  WP_APPLICATION_PASSWORD: z
-    .string({ required_error: "WP_APPLICATION_PASSWORD is not set" })
-    .min(1, "WP_APPLICATION_PASSWORD is not set"),
+  WP_URL: requiredString("WP_URL is not set").min(1, "WP_URL is not set"),
+  WP_USERNAME: requiredString("WP_USERNAME is not set").min(
+    1,
+    "WP_USERNAME is not set",
+  ),
+  WP_APPLICATION_PASSWORD: requiredString(
+    "WP_APPLICATION_PASSWORD is not set",
+  ).min(1, "WP_APPLICATION_PASSWORD is not set"),
 });
 
 export function wordpressCredentials(): {
@@ -138,12 +139,14 @@ export function wordpressCredentials(): {
 }
 
 const strapiEnvSchema = z.object({
-  STRAPI_API_URL: z
-    .string({ required_error: "STRAPI_API_URL is not set" })
-    .min(1, "STRAPI_API_URL is not set"),
-  STRAPI_API_TOKEN: z
-    .string({ required_error: "STRAPI_API_TOKEN is not set" })
-    .min(1, "STRAPI_API_TOKEN is not set"),
+  STRAPI_API_URL: requiredString("STRAPI_API_URL is not set").min(
+    1,
+    "STRAPI_API_URL is not set",
+  ),
+  STRAPI_API_TOKEN: requiredString("STRAPI_API_TOKEN is not set").min(
+    1,
+    "STRAPI_API_TOKEN is not set",
+  ),
 });
 
 export function strapiCredentials(): { apiUrl: string; apiToken: string } {

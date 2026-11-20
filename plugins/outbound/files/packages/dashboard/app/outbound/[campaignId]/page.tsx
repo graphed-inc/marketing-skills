@@ -44,16 +44,18 @@ export default async function CampaignPage({
   params,
   searchParams,
 }: {
-  params: { campaignId: string };
-  searchParams?: {
+  params: Promise<{ campaignId: string }>;
+  searchParams?: Promise<{
     tab?: string;
     thread?: string;
     after?: string;
     notice?: string;
     error?: string;
-  };
+  }>;
 }) {
-  const campaign = await getOutboundCampaign(params.campaignId);
+  const { campaignId } = await params;
+  const filters = (await searchParams) ?? {};
+  const campaign = await getOutboundCampaign(campaignId);
   if (!campaign) {
     return (
       <div className="mx-auto max-w-3xl space-y-4">
@@ -72,7 +74,7 @@ export default async function CampaignPage({
     );
   }
 
-  const tab = readTab(searchParams?.tab);
+  const tab = readTab(filters.tab);
   const base = `/outbound/${encodeURIComponent(campaign.instantlyId)}`;
   const apiKey = readInstantlyApiKey();
 
@@ -105,7 +107,7 @@ export default async function CampaignPage({
         const byId = new Map<string, InstantlyEmail>();
         for (const email of [...received, ...sent]) byId.set(email.id, email);
         threads = threadsFromEmails([...byId.values()]);
-        const requested = searchParams?.thread;
+        const requested = filters.thread;
         selectedId =
           threads.find((thread) => thread.threadId === requested)?.threadId ??
           threads[0]?.threadId ??
@@ -139,7 +141,7 @@ export default async function CampaignPage({
         const page = await listCampaignLeads({
           apiKey,
           campaignId: campaign.instantlyId,
-          startingAfter: searchParams?.after || null,
+          startingAfter: filters.after || null,
           limit: 100,
         });
         leads = page.leads;
@@ -185,7 +187,7 @@ export default async function CampaignPage({
         />
       </div>
 
-      <Notices notice={searchParams?.notice} error={searchParams?.error} />
+      <Notices notice={filters.notice} error={filters.error} />
 
       {tab === "unibox" ? (
         <Unibox

@@ -2,7 +2,9 @@ import { promises as fs } from "node:fs";
 import * as path from "node:path";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { FileMigrationProvider, Migrator } from "kysely";
+// Kysely 0.29 moved the migrator out of the package root. Importing it from
+// "kysely" typechecks as an error and fails at runtime.
+import { FileMigrationProvider, Migrator } from "kysely/migration";
 import { destroyDb, getDb } from "./index";
 
 // Applies every pending migration in src/migrations/ (numbered TS modules

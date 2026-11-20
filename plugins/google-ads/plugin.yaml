@@ -1,5 +1,5 @@
 name: google-ads
-version: 0.1.0
+version: 0.2.0
 kind: channel
 summary: Google Ads agent — daily Testing → Winners loop, locked Mastra tools, KPI + sessions dashboard
 description: >
@@ -52,4 +52,4 @@ provides:
     - /google-ads
 
 compat:
-  scaffold: ">=0.1.0"
+  scaffold: ">=0.2.0"

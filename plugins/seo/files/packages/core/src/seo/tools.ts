@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { envSlice, loadLocalEnv } from "../config";
+import { envSlice, loadLocalEnv, requiredString } from "../config";
 
 // Graphed Tools proxy. Cloud jobs/services and `graphed dev run` inject
 // GRAPHED_TOKEN and GRAPHED_TOOLS_URL. Article drafting posts chat
@@ -16,16 +16,12 @@ const MISSING_TOOLS =
   "Run through `graphed dev run -- <command>` locally, or deploy, so Graphed injects GRAPHED_TOKEN and GRAPHED_TOOLS_URL.";
 
 const toolsEnvSchema = z.object({
-  GRAPHED_TOOLS_URL: z
-    .string({
-      required_error: `GRAPHED_TOOLS_URL is not set. ${MISSING_TOOLS}`,
-    })
-    .url(),
-  GRAPHED_TOKEN: z
-    .string({
-      required_error: `GRAPHED_TOKEN is not set. ${MISSING_TOOLS}`,
-    })
-    .min(1, `GRAPHED_TOKEN is not set. ${MISSING_TOOLS}`),
+  GRAPHED_TOOLS_URL: requiredString(
+    `GRAPHED_TOOLS_URL is not set. ${MISSING_TOOLS}`,
+  ).url(),
+  GRAPHED_TOKEN: requiredString(
+    `GRAPHED_TOKEN is not set. ${MISSING_TOOLS}`,
+  ).min(1, `GRAPHED_TOKEN is not set. ${MISSING_TOOLS}`),
 });
 
 const POLL_MS = 1_000;

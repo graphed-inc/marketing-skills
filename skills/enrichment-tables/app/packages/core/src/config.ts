@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { z, type ZodTypeAny } from "zod";
+import { z, type ZodType } from "zod";
 
 // Environment access for every process type (jobs, dashboard routes, scripts).
 //
@@ -39,7 +39,7 @@ export function loadLocalEnv(): void {
   process.loadEnvFile(envFile);
 }
 
-export function envSlice<S extends ZodTypeAny>(schema: S): z.infer<S> {
+export function envSlice<S extends ZodType>(schema: S): z.infer<S> {
   loadLocalEnv();
   const result = schema.safeParse(process.env);
   if (!result.success) {
