@@ -27,6 +27,7 @@ Open the name for a short overview. Open Instructions for the steps your agent f
 | [UGC studio](skills/ugc-studio/SKILL.md) | Deploys a video studio for your team. Write scripts from your website, pick avatars, and render a grid of talking-head ads in parallel, each checked word by word against the script. | [Instructions](skills/ugc-studio/SKILL.md) |
 | [Ad spy](skills/ad-spy/SKILL.md) | Deploys a competitor ad library that pulls Meta, Google and LinkedIn ads every day, plus a heat map of what your buyers say that no competitor ad says yet, with ad ideas for each gap. | [Instructions](skills/ad-spy/SKILL.md) |
 | [AI video editor](skills/ai-video-editor/SKILL.md) | Deploys a video review and editing app for your team. Upload your cameras and mics, and your agent cuts the episode, renders it in minutes, and applies the notes you leave on the video. | [Instructions](skills/ai-video-editor/SKILL.md) |
+| [AI SEO tool](skills/ai-seo-tool/SKILL.md) | Deploys an SEO app for your team and your agent. Research keywords, backlinks and competitors, find the keywords and links they have that you don't, track rankings every day, and see where AI answers mention you. | [Instructions](skills/ai-seo-tool/SKILL.md) |
 
 <!-- catalog:end -->
 

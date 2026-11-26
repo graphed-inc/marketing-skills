@@ -1,0 +1,36 @@
+<div id="app">
+  <aside>
+    <div class="sb-head"><div class="ws-ico">A</div><div style="flex:1"><b>AI SEO Tool</b><span>Graphed Cloud</span></div></div>
+    <div class="sb-group">
+      <div class="sb-sec"><span>Research</span></div>
+      <div class="tbl" data-nav="site" onclick="go('#/site')"><i data-i="globe"></i><span class="nm">Site Explorer</span></div>
+      <div class="tbl" data-nav="keywords" onclick="go('#/keywords')"><i data-i="key"></i><span class="nm">Keywords Explorer</span></div>
+      <div class="tbl" data-nav="serp" onclick="go('#/serp')"><i data-i="search"></i><span class="nm">SERP checker</span></div>
+      <div class="tbl" data-nav="links" onclick="go('#/links')"><i data-i="link"></i><span class="nm">Backlinks</span></div>
+      <div class="tbl" data-nav="mentions" onclick="go('#/mentions')"><i data-i="ai"></i><span class="nm">AI mentions</span></div>
+      <div class="tbl" data-nav="lists" onclick="go('#/lists')"><i data-i="list"></i><span class="nm">Keyword lists</span></div>
+      <div class="sb-sec"><span>Projects</span><button class="btn btn-ghost btn-xs btn-icon" title="New project" onclick="newProject()" data-i="plus"></button></div>
+      <div id="projects"></div>
+    </div>
+    <div class="sb-foot">
+      <button class="btn btn-outline btn-sm btn-block" onclick="newProject()"><i data-i="plus"></i>New project</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px"><div class="tbl" data-nav="agent" onclick="go('#/agent')" style="justify-content:center"><i data-i="plug"></i><span class="nm" style="flex:none">Agents</span></div>
+      <div class="tbl" data-nav="credits" onclick="go('#/credits')" style="justify-content:center"><i data-i="coins"></i><span class="nm" style="flex:none">Credits</span><span class="ct" id="cr30"></span></div></div>
+    </div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <span class="crumb" id="crumb">AI SEO Tool</span><span class="sep" style="transform:rotate(20deg)"></span>
+      <b id="ttl" style="font-size:14px"></b>
+      <span class="grow"></span>
+      <span id="tactions"></span>
+    </div>
+    <div class="page" id="page"><div class="wrap" id="view"></div></div>
+  </main>
+</div>
+<div id="bulk"><b id="bulkn"></b><span id="bulkacts"></span><button class="btn btn-ghost btn-sm btn-icon" onclick="clearSel()" data-i="x"></button></div>
+<div id="shade" onclick="closeDrawer()"></div>
+<div id="drawer"><div class="sh-head"><div><h3 id="dtitle"></h3><p id="ddesc"></p></div><button class="btn btn-ghost btn-sm btn-icon sh-close" onclick="closeDrawer()" data-i="x"></button></div><div class="sh-body" id="dbody"></div><div class="sh-foot" id="dfoot"></div></div>
+<div id="dshade"></div><div id="dialog"></div>
+<div id="menu"></div>
+<div id="toasts"></div>

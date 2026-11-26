@@ -1,0 +1,17 @@
+{
+  "name": "ai-seo-tool",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node test.mjs"
+  },
+  "dependencies": {
+    "@graphed-inc/sdk": "^0.0.4",
+    "openai": "^4.77.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15"
+  }
+}

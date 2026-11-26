@@ -132,6 +132,12 @@
       "version": "0.1.0",
       "path": "skills/ai-video-editor",
       "summary": "Deploy a hosted video review and editing app: upload cameras, mics and screen recordings, word-by-word transcripts, an agent-written edit document rendered on parallel Modal sandboxes (a one-hour podcast in about 4 minutes), frame comments, script cuts and an @agent task queue"
+    },
+    {
+      "name": "ai-seo-tool",
+      "version": "0.1.0",
+      "path": "skills/ai-seo-tool",
+      "summary": "Deploy a hosted SEO app with an MCP server: site and keyword research, SERP link barrier, backlinks, AI mentions, keyword lists, keyword and link gap, daily rank tracker, Search Console + GA4 from the warehouse, site audit with Lighthouse, AI visibility, and a local rank grid, on DataForSEO and Serper through Graphed Tools"
     }
   ]
 }

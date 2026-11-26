@@ -1,0 +1,12 @@
+**/node_modules
+.git
+.data
+.env*
+.graphed
+.graphed.json
+*.log
+test.mjs
+fixtures
+ui
+registry
+README.md

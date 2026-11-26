@@ -106,5 +106,12 @@
     "detail": "Upload the raw files, review each cut, leave notes.",
     "summary": "Deploys a video review and editing app for your team. Upload your cameras and mics, and your agent cuts the episode, renders it in minutes, and applies the notes you leave on the video.",
     "themes": ["Video", "Content"]
+  },
+  "ai-seo-tool": {
+    "title": "AI SEO tool",
+    "outcome": "Research my SEO and competitors",
+    "detail": "Keywords, backlinks, rankings and AI search in one app.",
+    "summary": "Deploys an SEO app for your team and your agent. Research keywords, backlinks and competitors, find the keywords and links they have that you don't, track rankings every day, and see where AI answers mention you.",
+    "themes": ["SEO", "Analytics"]
   }
 }

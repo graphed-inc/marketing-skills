@@ -1,0 +1,39 @@
+slug: ai-seo-tool
+name: AI SEO Tool
+
+# SEO research + tracking app: Site Explorer, Keywords Explorer, SERP checker, backlinks, AI mentions, keyword
+# lists, and per project keyword gap, link gap, rank tracker, Search Console + GA4, site audit, AI visibility,
+# local rank grid. DataForSEO + Serper through Graphed Tools; Search Console + GA4 from the Graphed warehouse.
+# Private by default: everything needs a Graphed login at the gateway, except
+#   /mcp   the MCP server: lib/mcp.mjs refuses every request without a bearer token made on the Agent access page.
+# The gateway needs each regex to match the whole path.
+services:
+  web:
+    command: node server.mjs
+    port: 3000
+    healthcheck: /health
+    public:
+      paths:
+        - ^/mcp$
+
+databases:
+  primary:
+    env: DATABASE_URL
+
+jobs:
+  # Daily rank checks. The job only queues work; the web service's worker runs it.
+  ranks:
+    command: node cron.mjs daily
+    schedule:
+      cron: "0 6 * * *"
+      timezone: America/New_York
+    timeout_seconds: 300
+    retries: 1
+  # Weekly site audits + AI visibility, for projects that turned them on (Mondays).
+  weekly:
+    command: node cron.mjs weekly
+    schedule:
+      cron: "0 7 * * 1"
+      timezone: America/New_York
+    timeout_seconds: 300
+    retries: 1
